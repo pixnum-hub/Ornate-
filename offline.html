@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>ORNATE — Offline</title>
+<link rel="manifest" href="manifest.json"/>
+<meta name="theme-color" content="#d4af37"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-title" content="ORNATE"/>
+<link rel="apple-touch-icon" href="apple-touch-icon.png"/>
+<link rel="icon" type="image/x-icon" href="favicon.ico"/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{
+  min-height:100vh;display:flex;flex-direction:column;align-items:center;
+  justify-content:center;background:#1a1410;color:#f0e8d8;
+  font-family:Inter,system-ui,sans-serif;text-align:center;padding:32px 20px;
+}
+.gem{font-size:4rem;margin-bottom:16px;animation:float 3s ease-in-out infinite;}
+@keyframes float{0%,100%{transform:translateY(0);}50%{transform:translateY(-10px);}}
+h1{
+  font-family:Georgia,serif;font-size:clamp(1.8rem,8vw,2.6rem);
+  color:#d4af37;letter-spacing:.22em;text-transform:uppercase;margin-bottom:6px;
+  text-shadow:0 2px 0 #8b6914,0 6px 20px rgba(212,175,55,.3);
+}
+.sub{font-size:.8rem;letter-spacing:.16em;text-transform:uppercase;color:#8a7a60;margin-bottom:28px;}
+.card{
+  background:#2e261c;border:1px solid #4a3f2f;border-radius:16px;
+  padding:24px 28px;max-width:340px;width:100%;margin-bottom:20px;
+}
+.card h2{font-size:.76rem;letter-spacing:.14em;text-transform:uppercase;color:#d4af37;margin-bottom:12px;}
+.card p{font-size:.88rem;color:#c8b898;line-height:1.65;}
+.features{display:flex;flex-direction:column;gap:8px;margin-top:16px;text-align:left;}
+.feat{display:flex;align-items:center;gap:10px;font-size:.82rem;color:#c8b898;}
+.feat-icon{font-size:1rem;width:24px;text-align:center;flex-shrink:0;}
+.feat.na{color:#5a4f3f;}
+.divider{width:60px;height:1px;background:linear-gradient(90deg,transparent,#4a3f2f,transparent);margin:0 auto 20px;}
+.btn{
+  padding:13px 32px;background:linear-gradient(135deg,#8b6914,#d4af37);
+  color:#fff;border:none;border-radius:999px;font-size:.82rem;
+  letter-spacing:.12em;text-transform:uppercase;cursor:pointer;font-weight:700;
+  box-shadow:0 4px 18px rgba(212,175,55,.3);transition:transform .2s,box-shadow .2s;
+  font-family:Inter,system-ui,sans-serif;
+}
+.btn:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(212,175,55,.4);}
+.status{
+  margin-top:16px;font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;
+  color:#8a7a60;display:flex;align-items:center;gap:6px;justify-content:center;
+}
+.dot{width:7px;height:7px;border-radius:50%;background:#8a7a60;animation:blink 1.5s ease-in-out infinite;}
+@keyframes blink{0%,100%{opacity:.3;}50%{opacity:1;}}
+footer{margin-top:32px;font-size:.65rem;color:#4a3f2f;letter-spacing:.08em;}
+</style>
+</head>
+<body>
+  <span class="gem">💎</span>
+  <h1>ORNATE</h1>
+  <p class="sub">Gem & Metal Weight Calculator</p>
+
+  <div class="card">
+    <h2>You're Offline</h2>
+    <p>Live price updates are paused. All calculators and converters work offline.</p>
+    <div class="features">
+      <div class="feat"><span class="feat-icon">⚗️</span>Metal weight calculator — available</div>
+      <div class="feat"><span class="feat-icon">💍</span>Gemstone calculator — available</div>
+      <div class="feat"><span class="feat-icon">⚖️</span>Ratti · Carat · Gram converter — available</div>
+      <div class="feat na"><span class="feat-icon">📈</span>Live spot prices — offline unavailable</div>
+      <div class="feat na"><span class="feat-icon">🏙️</span>City gold rates — offline unavailable</div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+  <button class="btn" onclick="tryReconnect()">↺ Try Reconnect</button>
+  <div class="status">
+    <span class="dot" id="dot"></span>
+    <span id="statusTxt">Checking connection…</span>
+  </div>
+
+  <footer>© Manik Roy 2026. All Rights Reserved.</footer>
+
+  <script>
+    function setStatus(online) {
+      document.getElementById('statusTxt').textContent = online ? 'Back online — redirecting…' : 'No internet connection';
+      document.getElementById('dot').style.background = online ? '#3aaa5a' : '#cc4040';
+      document.getElementById('dot').style.animation = online ? 'none' : '';
+    }
+    function tryReconnect() {
+      fetch('jewellery-calculator.html', { cache: 'no-store' })
+        .then(() => { setStatus(true); setTimeout(() => location.replace('jewellery-calculator.html'), 600); })
+        .catch(() => setStatus(false));
+    }
+    window.addEventListener('online', () => { setStatus(true); setTimeout(() => location.replace('jewellery-calculator.html'), 800); });
+    window.addEventListener('offline', () => setStatus(false));
+    document.addEventListener('DOMContentLoaded', () => {
+      if (navigator.onLine) { setStatus(true); setTimeout(() => location.replace('jewellery-calculator.html'), 600); }
+      else setStatus(false);
+    });
+  </script>
+</body>
+</html>

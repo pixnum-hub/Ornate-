@@ -1,0 +1,70 @@
+{
+  "name": "ORNATE — Gem & Metal Weight Calculator",
+  "short_name": "ORNATE",
+  "description": "Jewellery precision tool: live gold & silver rates for 25 Indian cities, gemstone prices, ratti/carat/gram converter. © Manik Roy 2026",
+  "start_url": "jewellery-calculator.html",
+  "id": "ornate-jewellery-calculator",
+  "display": "standalone",
+  "display_override": ["standalone", "minimal-ui", "browser"],
+  "orientation": "portrait-primary",
+  "background_color": "#1a1410",
+  "theme_color": "#d4af37",
+  "categories": ["finance", "utilities", "shopping"],
+  "lang": "en-IN",
+  "dir": "ltr",
+  "scope": ".",
+  "icons": [
+    { "src": "icon-72x72.png",            "sizes": "72x72",   "type": "image/png" },
+    { "src": "icon-96x96.png",            "sizes": "96x96",   "type": "image/png" },
+    { "src": "icon-128x128.png",          "sizes": "128x128", "type": "image/png" },
+    { "src": "icon-144x144.png",          "sizes": "144x144", "type": "image/png" },
+    { "src": "icon-152x152.png",          "sizes": "152x152", "type": "image/png" },
+    { "src": "apple-touch-icon.png",      "sizes": "180x180", "type": "image/png" },
+    { "src": "icon-192x192.png",          "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icon-384x384.png",          "sizes": "384x384", "type": "image/png" },
+    { "src": "icon-512x512.png",          "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icon-maskable-192x192.png", "sizes": "192x192", "type": "image/png", "purpose": "maskable" },
+    { "src": "icon-maskable-512x512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ],
+  "shortcuts": [
+    {
+      "name": "Metal Weight Calculator",
+      "short_name": "Metals",
+      "description": "Weigh and value precious metals",
+      "url": "jewellery-calculator.html#metals",
+      "icons": [{ "src": "icon-96x96.png", "sizes": "96x96", "type": "image/png" }]
+    },
+    {
+      "name": "Gemstone Calculator",
+      "short_name": "Gems",
+      "description": "Weigh and value gemstones in ct, g, ratti",
+      "url": "jewellery-calculator.html#gems",
+      "icons": [{ "src": "icon-96x96.png", "sizes": "96x96", "type": "image/png" }]
+    },
+    {
+      "name": "Ratti / Carat / Gram Converter",
+      "short_name": "Converter",
+      "description": "Convert between ratti, carats, and grams",
+      "url": "jewellery-calculator.html#converter",
+      "icons": [{ "src": "icon-96x96.png", "sizes": "96x96", "type": "image/png" }]
+    },
+    {
+      "name": "Indian City Gold Rates",
+      "short_name": "City Rates",
+      "description": "Live gold & silver prices for 25 Indian cities",
+      "url": "jewellery-calculator.html#city-prices",
+      "icons": [{ "src": "icon-96x96.png", "sizes": "96x96", "type": "image/png" }]
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "platform": "narrow",
+      "label": "ORNATE Jewellery Weight & Price Calculator"
+    }
+  ],
+  "related_applications": [],
+  "prefer_related_applications": false
+}
