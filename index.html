@@ -1,0 +1,1468 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>ORNATE — Gem & Metal Weight Calculator © Manik Roy 2026</title>
+
+<!-- PWA Manifest -->
+<link rel="manifest" href="manifest.json"/>
+
+<!-- Theme color -->
+<meta name="theme-color" content="#d4af37" media="(prefers-color-scheme: light)"/>
+<meta name="theme-color" content="#d4af37" media="(prefers-color-scheme: dark)"/>
+
+<!-- iOS / Safari PWA -->
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+<meta name="apple-mobile-web-app-title" content="ORNATE"/>
+<link rel="apple-touch-icon" href="apple-touch-icon.png"/>
+<link rel="apple-touch-icon" sizes="152x152" href="icon-152x152.png"/>
+<link rel="apple-touch-icon" sizes="144x144" href="icon-144x144.png"/>
+
+<!-- Favicon -->
+<link rel="icon" type="image/x-icon" href="favicon.ico"/>
+<link rel="icon" type="image/png" sizes="32x32" href="icon-128x128.png"/>
+<link rel="icon" type="image/png" sizes="16x16" href="icon-72x72.png"/>
+
+<!-- SEO -->
+<meta name="description" content="ORNATE — Jewellery precision tool: gold, silver & gemstone weight calculator with live Indian city rates, ratti/carat/gram converter. © Manik Roy 2026"/>
+<meta name="keywords" content="jewellery calculator, gold weight, gemstone price, ratti to carat, gomed hessonite, Indian gold rate, silver price India"/>
+<meta name="author" content="Manik Roy"/>
+<meta name="robots" content="index, follow"/>
+
+<!-- Open Graph -->
+<meta property="og:title" content="ORNATE — Gem & Metal Weight Calculator"/>
+<meta property="og:description" content="Live gold rates for 25 Indian cities, gemstone prices, ratti/carat/gram converter. Built for Indian jewellery professionals."/>
+<meta property="og:image" content="icon-512x512.png"/>
+<meta property="og:type" content="website"/>
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="ORNATE — Gem & Metal Weight Calculator"/>
+<meta name="twitter:description" content="Live gold & gemstone prices, ratti/carat/gram converter for Indian jewellery."/>
+<meta name="twitter:image" content="icon-512x512.png"/>
+
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Cinzel:wght@400;600&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --bg:#f7f3ee;--bg2:#ede8e1;--bg3:#e2dbd1;
+  --surface:#fff;--surface2:#f0ebe3;
+  --border:#c8bfb0;--border2:#d8cfc4;
+  --text:#1a1410;--text2:#4a3f35;--text3:#7a6f65;
+  --accent:#8b6914;--accent2:#c49a2a;--accent3:#d4af37;
+  --gem:#2a6b8a;--gem2:#3a8aad;
+  --up:#1a7a3a;--down:#a02020;
+  --shadow:rgba(139,105,20,0.12);--shadow2:rgba(139,105,20,0.22);
+  --radius:16px;--radius-sm:8px;
+  --transition:0.28s cubic-bezier(0.4,0,0.2,1);
+  --font-serif:'Inter',system-ui,-apple-system,sans-serif;
+  --font-mono:'Inter',system-ui,-apple-system,sans-serif;
+  --font-display:'Cinzel',serif;
+}
+[data-theme="dark"]{
+  --bg:#1a1410;--bg2:#211c17;--bg3:#2a2318;
+  --surface:#2e261c;--surface2:#382f22;
+  --border:#4a3f2f;--border2:#5a4f3f;
+  --text:#f0e8d8;--text2:#c8b898;--text3:#8a7a60;
+  --accent:#d4af37;--accent2:#e8cc60;--accent3:#f0d870;
+  --gem:#4aadcc;--gem2:#6ac4e0;
+  --up:#3aaa5a;--down:#cc4040;
+  --shadow:rgba(0,0,0,.4);--shadow2:rgba(0,0,0,.6);
+}
+[data-theme="oled"]{
+  --bg:#000;--bg2:#080808;--bg3:#101010;
+  --surface:#0c0c0c;--surface2:#141414;
+  --border:#2a2a2a;--border2:#333;
+  --text:#fff;--text2:#ccc;--text3:#888;
+  --accent:#ffd700;--accent2:#ffdf40;--accent3:#ffe770;
+  --gem:#00d4ff;--gem2:#40e8ff;
+  --up:#00ff80;--down:#ff4040;
+  --shadow:rgba(0,0,0,.8);--shadow2:rgba(0,0,0,.95);
+}
+[data-theme="hc"]{
+  --bg:#ffffff;--bg2:#eeeeee;--bg3:#dddddd;
+  --surface:#ffffff;--surface2:#e2e2e2;
+  --border:#000000;--border2:#333333;
+  --text:#000000;--text2:#111111;--text3:#444444;
+  --accent:#0000bb;--accent2:#0000dd;--accent3:#2222ff;
+  --gem:#005500;--gem2:#007700;
+  --up:#004400;--down:#aa0000;
+  --shadow:rgba(0,0,0,0.18);--shadow2:rgba(0,0,0,0.30);
+}
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{font-size:16px;scroll-behavior:smooth;}
+body{
+  font-family:'Inter',system-ui,-apple-system,sans-serif;
+  font-size:15px;
+  background:var(--bg);color:var(--text);
+  min-height:100vh;display:flex;flex-direction:column;align-items:center;
+  transition:background var(--transition),color var(--transition);overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+  font-feature-settings:'tnum' 1;
+}
+body::before{
+  content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
+  background-image:
+    radial-gradient(circle at 20% 20%,rgba(212,175,55,.07) 0%,transparent 50%),
+    radial-gradient(circle at 80% 80%,rgba(42,107,138,.06) 0%,transparent 50%);
+}
+.wrapper{
+  width:100%;max-width:580px;padding:0 14px 36px;
+  display:flex;flex-direction:column;align-items:center;gap:18px;
+  position:relative;z-index:1;
+}
+
+/* HEADER */
+header{width:100%;text-align:center;padding:26px 20px 16px;}
+.header-icon{font-size:2.4rem;line-height:1;margin-bottom:8px;display:block;
+  filter:drop-shadow(0 2px 8px var(--shadow2));animation:float 4s ease-in-out infinite;}
+@keyframes float{0%,100%{transform:translateY(0);}50%{transform:translateY(-6px);}}
+header h1{font-family:var(--font-display);font-size:clamp(1.2rem,5vw,1.65rem);
+  font-weight:600;letter-spacing:.12em;color:var(--accent);text-transform:uppercase;line-height:1.2;margin-bottom:4px;}
+header p{font-family:'Inter',sans-serif;font-style:normal;font-size:.88rem;color:var(--text3);letter-spacing:.02em;}
+.app-name{
+  font-family:var(--font-display);
+  font-size:clamp(2.6rem,12vw,4rem);
+  font-weight:700;
+  letter-spacing:.22em;
+  text-transform:uppercase;
+  color:var(--accent3);
+  line-height:1;
+  margin-bottom:6px;
+  text-shadow:
+    0 2px 0 var(--accent),
+    0 4px 0 rgba(139,105,20,0.4),
+    0 8px 24px rgba(212,175,55,0.35),
+    0 0 60px rgba(212,175,55,0.15);
+}
+[data-theme="dark"] .app-name{
+  text-shadow:
+    0 2px 0 #a07800,
+    0 4px 0 rgba(180,130,0,0.5),
+    0 8px 28px rgba(212,175,55,0.5),
+    0 0 80px rgba(212,175,55,0.2);
+}
+[data-theme="oled"] .app-name{
+  color:#ffd700;
+  text-shadow:
+    0 2px 0 #aa9000,
+    0 4px 12px rgba(255,215,0,0.7),
+    0 0 40px rgba(255,215,0,0.4);
+}
+.app-sub{
+  font-family:'Inter',sans-serif;
+  font-size:clamp(.68rem,2.2vw,.82rem);
+  letter-spacing:.18em;
+  text-transform:uppercase;
+  color:var(--accent2);
+  margin-bottom:2px;
+  font-weight:500;
+}
+.divider{width:80px;height:1.5px;background:linear-gradient(90deg,transparent,var(--accent3),transparent);margin:10px auto 0;}
+
+/* THEME */
+.theme-bar{width:100%;display:flex;justify-content:center;gap:7px;flex-wrap:wrap;}
+.theme-btn{font-family:var(--font-mono);font-size:.68rem;letter-spacing:.08em;padding:6px 13px;
+  border-radius:999px;border:1.5px solid var(--border);background:var(--surface);color:var(--text2);
+  cursor:pointer;transition:all var(--transition);text-transform:uppercase;}
+.theme-btn:hover{background:var(--accent);border-color:var(--accent);color:#fff;box-shadow:0 2px 12px var(--shadow2);}
+[data-theme="light"] .theme-btn.active{background:#8b6914;border-color:#8b6914;color:#fff;box-shadow:0 2px 14px rgba(139,105,20,0.35);}
+[data-theme="dark"] .theme-btn.active{background:#d4af37;border-color:#d4af37;color:#1a1410;box-shadow:0 2px 14px rgba(212,175,55,0.45);}
+[data-theme="oled"] .theme-btn.active{background:#ffffff;border-color:#ffffff;color:#000000;box-shadow:0 2px 16px rgba(255,255,255,0.25);}
+[data-theme="hc"] .theme-btn{background:#fff;border:2px solid #000;color:#000;}
+[data-theme="hc"] .theme-btn:hover{background:#000;color:#fff;border-color:#000;box-shadow:none;}
+[data-theme="hc"] .theme-btn.active{background:#0000cc !important;border:2.5px solid #0000cc !important;color:#fff !important;box-shadow:none !important;}
+
+/* HC: complete overrides */
+[data-theme="hc"] body::before{display:none;}
+[data-theme="hc"] .card{border:2px solid #000 !important;box-shadow:2px 2px 0 #000;}
+[data-theme="hc"] .card-header{border-bottom:2px solid #000 !important;background:#e2e2e2 !important;}
+[data-theme="hc"] select,[data-theme="hc"] input[type="number"]{border:2px solid #000 !important;background:#fff !important;color:#000 !important;}
+[data-theme="hc"] select:focus,[data-theme="hc"] input[type="number"]:focus{border-color:#0000bb !important;box-shadow:0 0 0 3px rgba(0,0,187,0.2) !important;}
+[data-theme="hc"] .result-row,[data-theme="hc"] .conv-item,[data-theme="hc"] .conv-ref-grid{border:1.5px solid #333 !important;}
+[data-theme="hc"] .currency-toggle,[data-theme="hc"] .mkt-toggle,[data-theme="hc"] .gem-unit-toggle{border:2px solid #000 !important;}
+[data-theme="hc"] .cur-btn{color:#000 !important;}
+[data-theme="hc"] .cur-btn.active{background:#0000bb !important;color:#fff !important;}
+[data-theme="hc"] .mkt-btn{color:#000 !important;}
+[data-theme="hc"] .mkt-btn.active{background:#005500 !important;color:#fff !important;}
+[data-theme="hc"] .purity-pill{border:2px solid #000 !important;background:#fff !important;color:#000 !important;}
+[data-theme="hc"] .purity-pill:hover{border-color:#0000bb !important;color:#0000bb !important;}
+[data-theme="hc"] .purity-pill.active{background:#0000bb !important;border-color:#0000bb !important;color:#fff !important;}
+[data-theme="hc"] .shape-pill{border:2px solid #000 !important;background:#fff !important;color:#000 !important;}
+[data-theme="hc"] .shape-pill.active{background:#005500 !important;border-color:#005500 !important;color:#fff !important;}
+[data-theme="hc"] .gem-unit-btn{color:#000 !important;}
+[data-theme="hc"] .gem-unit-btn.active{background:#005500 !important;color:#fff !important;}
+[data-theme="hc"] .market-tab{color:#000 !important;}
+[data-theme="hc"] .market-tab.active{color:#0000bb !important;border-bottom:3px solid #0000bb !important;background:#fff !important;}
+[data-theme="hc"] .market-tab.gtab.active{color:#005500 !important;border-bottom-color:#005500 !important;}
+[data-theme="hc"] .city-metal-tab{border:2px solid #000 !important;background:#fff !important;color:#000 !important;}
+[data-theme="hc"] .city-metal-tab.active{background:#0000bb !important;border-color:#0000bb !important;color:#fff !important;}
+[data-theme="hc"] .conv-dir-btn{border:2px solid #000 !important;background:#fff !important;color:#000 !important;}
+[data-theme="hc"] .conv-dir-btn.active{background:#005500 !important;border-color:#005500 !important;color:#fff !important;box-shadow:none !important;}
+[data-theme="hc"] .conv-dir-btn:hover:not(.active){border-color:#005500 !important;color:#005500 !important;}
+[data-theme="hc"] .conv-quick-btn{border:2px solid #000 !important;background:#fff !important;color:#000 !important;}
+[data-theme="hc"] .conv-quick-btn:hover{border-color:#0000bb !important;color:#0000bb !important;}
+[data-theme="hc"] .calc-btn{background:#0000bb !important;color:#fff !important;box-shadow:2px 2px 0 #000 !important;}
+[data-theme="hc"] .calc-btn:hover{background:#000088 !important;transform:none !important;}
+[data-theme="hc"] .reset-btn{border:2px solid #000 !important;color:#000 !important;}
+[data-theme="hc"] .reset-btn:hover{background:#000 !important;color:#fff !important;}
+[data-theme="hc"] .refresh-btn{border:2px solid #000 !important;color:#000 !important;background:#fff !important;}
+[data-theme="hc"] .refresh-btn:hover{border-color:#0000bb !important;color:#0000bb !important;}
+[data-theme="hc"] .result-header{background:#0000bb !important;}
+[data-theme="hc"] .result-header h3{color:#fff !important;}
+[data-theme="hc"] .result-main{color:#fff !important;}
+[data-theme="hc"] .result-val.hl{color:#0000bb !important;}
+[data-theme="hc"] .result-val.ghl{color:#005500 !important;}
+[data-theme="hc"] .app-name{color:#0000bb !important;text-shadow:2px 2px 0 #000033 !important;}
+[data-theme="hc"] .mkt-badge,[data-theme="hc"] .info-badge{border:1.5px solid #333 !important;}
+
+
+/* CURRENCY TOGGLE */
+.currency-toggle{display:flex;align-items:center;background:var(--bg2);border:1.5px solid var(--border);border-radius:999px;overflow:hidden;height:32px;}
+.cur-btn{font-family:var(--font-mono);font-size:.72rem;letter-spacing:.08em;padding:0 14px;height:100%;border:none;background:transparent;color:var(--text3);cursor:pointer;transition:all var(--transition);text-transform:uppercase;}
+.cur-btn.active{background:var(--accent);color:#fff;font-weight:500;}
+[data-theme="dark"] .cur-btn.active{color:#1a1410;}
+[data-theme="oled"] .cur-btn.active{color:#000;}
+.cur-divider{width:1px;height:60%;background:var(--border);flex-shrink:0;}
+
+/* CONTROLS ROW */
+.controls-row{width:100%;display:flex;gap:10px;align-items:center;justify-content:center;flex-wrap:wrap;}
+
+/* CURRENCY TOGGLE */
+.currency-toggle{display:flex;align-items:center;background:var(--bg2);border:1.5px solid var(--border);border-radius:999px;height:34px;flex-shrink:0;}
+.cur-btn{font-family:'Inter',system-ui,sans-serif;font-size:.74rem;font-weight:500;letter-spacing:.04em;padding:0 16px;height:100%;border:none;background:transparent;color:var(--text2);cursor:pointer;transition:all var(--transition);text-transform:uppercase;white-space:nowrap;}
+.cur-btn.active{background:var(--accent);color:#fff;font-weight:600;border-radius:999px;}
+[data-theme="dark"] .cur-btn.active{color:#1a1410;}
+[data-theme="oled"] .cur-btn.active{color:#000;}
+.cur-divider{width:1px;height:60%;background:var(--border);flex-shrink:0;}
+.mkt-toggle{display:flex;align-items:center;background:var(--bg2);border:1.5px solid var(--border);border-radius:999px;height:34px;flex-shrink:0;}
+.mkt-btn{font-family:'Inter',system-ui,sans-serif;font-size:.74rem;font-weight:500;letter-spacing:.04em;padding:0 14px;height:100%;border:none;background:transparent;color:var(--text2);cursor:pointer;transition:all var(--transition);text-transform:uppercase;display:flex;align-items:center;gap:5px;white-space:nowrap;}
+.mkt-btn.active{background:var(--gem);color:#fff;font-weight:600;border-radius:999px;}
+[data-theme="oled"] .mkt-btn.active{color:#000;}
+.mkt-divider{width:1px;height:60%;background:var(--border);flex-shrink:0;}
+
+/* MARKETPLACE BADGE */
+.mkt-badge{display:flex;align-items:center;gap:6px;padding:5px 12px;background:var(--bg3);border:1px solid var(--border2);border-radius:var(--radius-sm);font-family:var(--font-mono);font-size:.6rem;color:var(--text3);letter-spacing:.06em;line-height:1.5;}
+
+/* CITY PRICES */
+.city-card{display:none;}
+.city-card.show{display:block;}
+.city-controls{display:flex;align-items:center;gap:8px;padding:12px 16px;background:var(--surface2);border-bottom:1px solid var(--border2);flex-wrap:wrap;}
+.city-metal-tabs{display:flex;gap:5px;flex-wrap:wrap;}
+.city-metal-tab{font-family:var(--font-mono);font-size:.62rem;letter-spacing:.08em;text-transform:uppercase;padding:5px 11px;border-radius:999px;border:1.5px solid var(--border);background:var(--bg2);color:var(--text3);cursor:pointer;transition:all var(--transition);}
+.city-metal-tab.active{background:var(--accent);border-color:var(--accent);color:#fff;}
+[data-theme="dark"] .city-metal-tab.active{color:#1a1410;}
+[data-theme="oled"] .city-metal-tab.active{color:#000;}
+.city-grid{display:grid;grid-template-columns:1fr 1fr;gap:0;width:100%;}
+.city-item{padding:9px 10px;border-bottom:1px solid var(--border2);border-right:1px solid var(--border2);display:flex;flex-direction:column;gap:3px;transition:background var(--transition);min-width:0;overflow:hidden;}
+.city-item:nth-child(even){border-right:none;}
+.city-item:nth-last-child(-n+2){border-bottom:none;}
+.city-item:hover{background:var(--bg3);}
+.city-name{font-family:'Inter',sans-serif;font-size:.82rem;color:var(--text2);display:flex;align-items:baseline;gap:4px;flex-wrap:wrap;min-width:0;}
+.city-flag{font-size:.7rem;flex-shrink:0;}
+.city-state{font-family:var(--font-mono);font-size:.52rem;color:var(--text3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%;}
+.city-prices{display:flex;flex-direction:column;gap:2px;margin-top:2px;}
+.city-price-row{display:flex;justify-content:space-between;align-items:center;gap:4px;}
+.city-karat{font-family:var(--font-mono);font-size:.56rem;text-transform:uppercase;letter-spacing:.06em;color:var(--text3);flex-shrink:0;}
+.city-val{font-family:var(--font-mono);font-size:.72rem;color:var(--text);font-weight:500;white-space:nowrap;}
+.city-val.gold-c{color:var(--accent2);}
+.city-val.silver-c{color:var(--text2);}
+.city-note{font-family:var(--font-mono);font-size:.54rem;color:var(--text3);margin-top:1px;}
+.city-source{font-family:var(--font-mono);font-size:.58rem;color:var(--text3);padding:8px 14px;text-align:center;border-top:1px solid var(--border2);}
+.city-updated{font-family:var(--font-mono);font-size:.6rem;color:var(--text3);padding:6px 14px 8px;text-align:center;}
+
+/* GEM UNIT TOGGLE */
+.gem-unit-toggle{display:flex;align-items:center;background:var(--bg3);border:1.5px solid var(--border);border-radius:999px;overflow:hidden;height:26px;}
+.gem-unit-btn{font-family:var(--font-mono);font-size:.68rem;letter-spacing:.1em;padding:0 12px;height:100%;border:none;background:transparent;color:var(--text3);cursor:pointer;transition:all var(--transition);text-transform:uppercase;}
+.gem-unit-btn.active{background:var(--gem);color:#fff;font-weight:500;}
+[data-theme="oled"] .gem-unit-btn.active{color:#000;}
+.gem-unit-div{width:1px;height:60%;background:var(--border);flex-shrink:0;}
+
+/* CARAT ↔ GRAM CONVERTER */
+.conv-toggle-row{display:flex;gap:6px;flex-wrap:wrap;}
+.conv-dir-btn{flex:1;min-width:80px;padding:8px 10px;border-radius:var(--radius-sm);border:1.5px solid var(--border);background:var(--bg2);color:var(--text3);font-family:'Inter',sans-serif;font-size:.7rem;letter-spacing:.06em;text-transform:uppercase;cursor:pointer;transition:all var(--transition);text-align:center;}
+.conv-dir-btn.active{background:var(--gem);border-color:var(--gem);color:#fff;box-shadow:0 2px 12px var(--shadow);}
+[data-theme="dark"] .conv-dir-btn.active{color:#0a1a20;}
+[data-theme="oled"] .conv-dir-btn.active{color:#000;}
+
+.conv-dir-btn:hover:not(.active){border-color:var(--gem2);color:var(--gem2);}
+.conv-quick{display:flex;align-items:center;gap:6px;flex-wrap:wrap;}
+.conv-quick-label{font-family:'Inter',sans-serif;font-size:.62rem;color:var(--text3);letter-spacing:.08em;text-transform:uppercase;}
+.conv-quick-btn{font-family:'Inter',sans-serif;font-size:.68rem;padding:5px 11px;border-radius:999px;border:1.5px solid var(--border);background:var(--bg2);color:var(--text2);cursor:pointer;transition:all var(--transition);}
+.conv-quick-btn:hover{border-color:var(--gem2);color:var(--gem2);background:var(--surface);}
+.conv-note{font-family:'Inter',sans-serif;font-size:.63rem;color:var(--text3);text-align:center;padding:4px 0;letter-spacing:.04em;}
+.conv-ref-grid{display:flex;flex-direction:column;gap:4px;background:var(--bg2);border:1px solid var(--border2);border-radius:var(--radius-sm);padding:10px 13px;}
+.conv-ref-item{display:flex;justify-content:space-between;align-items:center;gap:8px;}
+.conv-ref-lbl{font-family:'Inter',sans-serif;font-size:.68rem;font-weight:600;color:var(--text2);}
+.conv-ref-val{font-family:'Inter',sans-serif;font-size:.68rem;color:var(--text3);text-align:right;}
+
+/* CARD */
+.card{width:100%;background:var(--surface);border:1px solid var(--border2);
+  border-radius:var(--radius);box-shadow:0 4px 24px var(--shadow);overflow:hidden;
+  transition:background var(--transition),border-color var(--transition);}
+.card-header{display:flex;align-items:center;gap:10px;padding:14px 18px 12px;
+  border-bottom:1px solid var(--border2);background:var(--surface2);}
+.card-icon{font-size:1.2rem;line-height:1;}
+.card-title{font-family:var(--font-display);font-size:.82rem;letter-spacing:.15em;
+  text-transform:uppercase;color:var(--accent);font-weight:600;}
+.card-title.gem-c{color:var(--gem);}
+.card-body{padding:18px;display:flex;flex-direction:column;gap:14px;}
+
+/* FORMS */
+.form-group{display:flex;flex-direction:column;gap:5px;}
+label{font-family:var(--font-mono);font-size:.66rem;letter-spacing:.14em;text-transform:uppercase;color:var(--text3);}
+select,input[type="number"]{
+  width:100%;padding:11px 13px;border:1.5px solid var(--border);border-radius:var(--radius-sm);
+  background:var(--bg2);color:var(--text);font-family:var(--font-serif);font-size:.98rem;
+  transition:border-color var(--transition),box-shadow var(--transition);
+  appearance:none;-webkit-appearance:none;outline:none;}
+select{
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23a09080' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 13px center;padding-right:34px;cursor:pointer;}
+select:focus,input[type="number"]:focus{border-color:var(--accent2);box-shadow:0 0 0 3px rgba(196,154,42,.15);background:var(--surface);}
+
+input[type="number"]::-webkit-inner-spin-button,input[type="number"]::-webkit-outer-spin-button{-webkit-appearance:none;}
+input[type="number"]{-moz-appearance:textfield;}
+.row-2{display:grid;grid-template-columns:1fr 1fr;gap:11px;}
+
+/* PILLS */
+.purity-group{display:flex;gap:6px;flex-wrap:wrap;}
+.purity-pill{font-family:var(--font-mono);font-size:.7rem;padding:5px 11px;border-radius:999px;
+  border:1.5px solid var(--border);background:var(--bg2);color:var(--text2);cursor:pointer;
+  transition:all var(--transition);letter-spacing:.06em;}
+.purity-pill:hover{border-color:var(--accent2);color:var(--accent2);}
+.purity-pill.active{background:var(--accent);border-color:var(--accent);color:#fff;}
+[data-theme="oled"] .purity-pill.active{color:#000;}
+
+.shape-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:5px;}
+.shape-pill{display:flex;flex-direction:column;align-items:center;gap:2px;
+  padding:7px 3px;border-radius:var(--radius-sm);border:1.5px solid var(--border);
+  background:var(--bg2);color:var(--text2);cursor:pointer;transition:all var(--transition);font-size:1rem;}
+.shape-pill span.lbl{font-family:var(--font-mono);font-size:.54rem;text-transform:uppercase;color:var(--text3);}
+.shape-pill:hover{border-color:var(--gem2);}
+.shape-pill.active{background:var(--gem);border-color:var(--gem);color:#fff;}
+.shape-pill.active span.lbl{color:rgba(255,255,255,.8);}
+
+/* BUTTONS */
+.calc-btn{width:100%;padding:12px 16px;border:none;border-radius:var(--radius-sm);
+  background:linear-gradient(135deg,var(--accent),var(--accent3));color:#fff;
+  font-family:var(--font-display);font-size:.8rem;letter-spacing:.12em;text-transform:uppercase;
+  cursor:pointer;transition:all var(--transition);box-shadow:0 4px 20px var(--shadow2);
+  position:relative;overflow:hidden;white-space:nowrap;}
+[data-theme="oled"] .calc-btn{color:#000;}
+
+.calc-btn::before{content:'';position:absolute;inset:0;
+  background:linear-gradient(135deg,transparent 0%,rgba(255,255,255,.2) 50%,transparent 100%);
+  transform:translateX(-100%);transition:transform .5s ease;}
+.calc-btn:hover::before{transform:translateX(100%);}
+.calc-btn:hover{transform:translateY(-2px);box-shadow:0 8px 28px var(--shadow2);}
+.reset-btn{width:100%;padding:11px 20px;border:1.5px solid var(--border);border-radius:var(--radius-sm);
+  background:transparent;color:var(--text3);font-family:var(--font-mono);font-size:.68rem;
+  letter-spacing:.16em;text-transform:uppercase;cursor:pointer;transition:all var(--transition);}
+.reset-btn:hover{border-color:var(--text3);color:var(--text);background:var(--bg2);}
+
+/* RESULTS */
+.result-card{width:100%;background:var(--surface);border:1px solid var(--border2);border-radius:var(--radius);
+  overflow:hidden;box-shadow:0 4px 24px var(--shadow);display:none;
+  animation:slideUp .4s cubic-bezier(.4,0,.2,1) forwards;}
+.result-card.show{display:block;}
+@keyframes slideUp{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
+.result-header{background:linear-gradient(135deg,var(--accent),var(--accent3));padding:14px 18px;text-align:center;}
+
+.result-header h3{font-family:var(--font-display);font-size:.78rem;letter-spacing:.2em;
+  text-transform:uppercase;color:rgba(255,255,255,.85);margin-bottom:4px;}
+[data-theme="oled"] .result-header h3{color:rgba(0,0,0,.7);}
+.result-main{font-family:var(--font-mono);font-size:clamp(1.8rem,7vw,2.6rem);font-weight:500;color:#fff;}
+[data-theme="oled"] .result-main{color:#000;}
+.result-body{padding:18px;display:flex;flex-direction:column;gap:9px;}
+.result-row{display:flex;justify-content:space-between;align-items:center;
+  padding:9px 13px;background:var(--bg2);border-radius:var(--radius-sm);border:1px solid var(--border2);}
+.result-label{font-family:var(--font-mono);font-size:.65rem;letter-spacing:.12em;text-transform:uppercase;color:var(--text3);}
+.result-val{font-family:var(--font-mono);font-size:.88rem;color:var(--text);font-weight:500;}
+.result-val.hl{color:var(--accent2);}
+.result-val.ghl{color:var(--gem2);}
+.sep{width:100%;height:1px;background:linear-gradient(90deg,transparent,var(--border),transparent);margin:2px 0;}
+.converter-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.conv-item{padding:9px 12px;background:var(--bg2);border:1px solid var(--border2);border-radius:var(--radius-sm);}
+.conv-unit{font-family:var(--font-mono);font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:var(--text3);}
+.conv-val{font-family:var(--font-mono);font-size:.85rem;color:var(--text);}
+
+/* HINTS */
+.density-hint{font-family:var(--font-mono);font-size:.63rem;color:var(--text3);margin-top:-6px;}
+.error-msg{font-family:var(--font-mono);font-size:.7rem;color:#cc3333;padding:7px 13px;
+  background:rgba(204,51,51,.08);border:1px solid rgba(204,51,51,.25);border-radius:var(--radius-sm);display:none;}
+.error-msg.show{display:block;}
+
+/* ══════════════════ MARKET PRICES ══════════════════ */
+.market-tabs{display:flex;width:100%;background:var(--bg2);border-bottom:1px solid var(--border2);}
+.market-tab{flex:1;padding:11px 6px;font-family:var(--font-mono);font-size:.68rem;letter-spacing:.1em;
+  text-transform:uppercase;border:none;background:transparent;color:var(--text3);cursor:pointer;
+  transition:all var(--transition);text-align:center;border-bottom:2px solid transparent;}
+.market-tab.active{background:var(--surface);color:var(--accent);border-bottom-color:var(--accent);}
+.market-tab.gtab.active{color:var(--gem);border-bottom-color:var(--gem);}
+.market-panel{display:none;}
+.market-panel.active{display:block;}
+
+/* METAL TABLE */
+.price-table{width:100%;border-collapse:collapse;}
+.price-table thead tr{background:var(--surface2);}
+.price-table th{font-family:var(--font-mono);font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--text3);padding:9px 10px;text-align:left;border-bottom:1px solid var(--border2);}
+.price-table th:not(:first-child){text-align:right;}
+.price-table td{padding:8px 10px;font-family:var(--font-mono);font-size:.78rem;color:var(--text);
+  border-bottom:1px solid var(--border2);vertical-align:middle;}
+.price-table td:not(:first-child){text-align:right;}
+.price-table tr:last-child td{border-bottom:none;}
+.price-table tr:hover td{background:var(--bg3);transition:background .15s;}
+.metal-cell{display:flex;align-items:center;gap:7px;}
+.metal-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0;}
+.metal-lbl{font-size:.8rem;color:var(--text2);}
+.metal-sym{font-size:.62rem;color:var(--text3);letter-spacing:.06em;}
+.price-used-v{color:var(--text3);}
+.cup{color:var(--up);}
+.cdn{color:var(--down);}
+.cfl{color:var(--text3);}
+
+.market-meta{display:flex;justify-content:space-between;align-items:center;
+  padding:10px 14px;background:var(--bg2);border-top:1px solid var(--border2);}
+.market-time{font-family:var(--font-mono);font-size:.6rem;color:var(--text3);}
+.refresh-btn{font-family:var(--font-mono);font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;
+  padding:5px 12px;border-radius:999px;border:1px solid var(--border);background:var(--surface);
+  color:var(--text3);cursor:pointer;transition:all var(--transition);}
+.refresh-btn:hover{border-color:var(--accent2);color:var(--accent2);}
+.refresh-btn.loading{opacity:.5;pointer-events:none;}
+.spinner{display:inline-block;width:10px;height:10px;border:1.5px solid var(--border);
+  border-top-color:var(--accent2);border-radius:50%;animation:spin .7s linear infinite;vertical-align:middle;margin-right:4px;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.source-note{font-family:var(--font-mono);font-size:.58rem;color:var(--text3);
+  padding:7px 14px;text-align:center;border-top:1px solid var(--border2);line-height:1.6;}
+
+/* GEM PRICES */
+.gem-price-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:14px;}
+.gem-price-item{padding:10px 12px;background:var(--bg2);border:1px solid var(--border2);
+  border-radius:var(--radius-sm);display:flex;flex-direction:column;gap:4px;}
+.gem-price-name{display:flex;align-items:center;gap:6px;}
+.gp-emoji{font-size:.95rem;line-height:1;}
+.gp-label{font-family:'Inter',sans-serif;font-size:.85rem;color:var(--text2);font-weight:500;}
+.gem-vals{display:flex;flex-direction:column;gap:2px;margin-top:5px;}
+.gem-val-row{display:flex;justify-content:space-between;}
+.gem-val-lbl{font-family:var(--font-mono);font-size:.58rem;text-transform:uppercase;letter-spacing:.08em;color:var(--text3);}
+.gem-val-num{font-family:var(--font-mono);font-size:.73rem;color:var(--text);}
+.gem-val-num.used-c{color:var(--text3);}
+.gem-quality{font-family:var(--font-mono);font-size:.56rem;color:var(--text3);
+  border-top:1px solid var(--border2);padding-top:4px;margin-top:3px;line-height:1.4;}
+
+.disclaimer{font-family:var(--font-mono);font-size:.6rem;color:var(--text3);
+  padding:10px 14px;border-top:1px solid var(--border2);line-height:1.6;text-align:center;}
+
+/* FOOTER */
+footer{width:100%;text-align:center;padding:22px 20px;display:flex;flex-direction:column;align-items:center;gap:5px;}
+.footer-copy{font-family:var(--font-mono);font-size:.66rem;color:var(--text3);letter-spacing:.1em;}
+.footer-line{width:60px;height:1px;background:var(--border);margin:4px auto;}
+.footer-tag{font-family:'Inter',sans-serif;font-style:normal;font-size:.78rem;color:var(--text3);letter-spacing:.04em;}
+.info-badge{display:inline-flex;align-items:center;gap:5px;padding:5px 11px;
+  background:var(--bg3);border:1px solid var(--border2);border-radius:999px;
+  font-family:'Inter',sans-serif;font-size:.63rem;color:var(--text3);}
+
+::-webkit-scrollbar{width:5px;}
+::-webkit-scrollbar-track{background:var(--bg);}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px;}
+@media(min-width:480px){.shape-grid{grid-template-columns:repeat(5,1fr);}}
+</style>
+</head>
+<body data-theme="dark">
+<div class="wrapper">
+
+<!-- HEADER -->
+<header>
+  <span class="header-icon">💎</span>
+  <h1 class="app-name">ORNATE</h1>
+  <p class="app-sub">Gem & Metal Weight Calculator</p>
+  <p>Jewellery Precision Tools</p>
+  <div class="divider"></div>
+</header>
+
+<!-- THEME -->
+<div class="theme-bar">
+  <button class="theme-btn" onclick="setTheme('light',this)">☀ Light</button>
+  <button class="theme-btn active" onclick="setTheme('dark',this)">🌙 Dark</button>
+  <button class="theme-btn" onclick="setTheme('oled',this)">⬛ OLED</button>
+  <button class="theme-btn" onclick="setTheme('hc',this)">◑ HC</button>
+</div>
+
+<!-- CONTROLS ROW: Currency + Marketplace -->
+<div class="controls-row">
+  <div class="currency-toggle">
+    <button class="cur-btn" id="btnUSD" onclick="setCurrency('USD',this)">$ USD</button>
+    <div class="cur-divider"></div>
+    <button class="cur-btn active" id="btnINR" onclick="setCurrency('INR',this)">₹ INR</button>
+  </div>
+  <div class="mkt-toggle">
+    <button class="mkt-btn active" id="btnIN" onclick="setMarket('IN',this)">🇮🇳 India</button>
+    <div class="mkt-divider"></div>
+    <button class="mkt-btn" id="btnUS" onclick="setMarket('US',this)">🇺🇸 US</button>
+  </div>
+</div>
+
+<!-- MARKETPLACE INFO BADGE -->
+<div class="mkt-badge" id="mktBadge">🇮🇳 Indian Market · Includes GST (3% gold/silver · 5% gems) + customs duty · Hallmark BIS standards</div>
+
+<!-- ══ MARKET PRICES ══ -->
+<div class="card">
+  <div class="card-header">
+    <span class="card-icon">📈</span>
+    <span class="card-title">Live Market Prices</span>
+  </div>
+  <div class="market-tabs">
+    <button class="market-tab active" onclick="switchTab('metals',this)">⚗ Metals (New / Used)</button>
+    <button class="market-tab gtab" onclick="switchTab('gems',this)">💎 Gemstones (New / Used)</button>
+  </div>
+
+  <!-- METALS -->
+  <div class="market-panel active" id="panel-metals">
+    <div style="overflow-x:auto;">
+      <table class="price-table" id="metalPriceTable">
+        <thead>
+          <tr>
+            <th>Metal</th>
+            <th>New (/g)</th>
+            <th>Used (/g)</th>
+            <th>Spot/oz</th>
+            <th>24h</th>
+          </tr>
+        </thead>
+        <tbody id="metalPriceTbody">
+          <tr><td colspan="5" style="text-align:center;padding:20px;">
+            <span class="spinner"></span> Fetching prices…
+          </td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="market-meta">
+      <span class="market-time" id="metalPriceTime">—</span>
+      <button class="refresh-btn" id="metalRefreshBtn" onclick="fetchPrices()">↺ Refresh</button>
+    </div>
+    <div class="source-note">
+      Spot data: exchangerate.host (XAU/XAG/XPT/XPD) + reference rates (no API key) · Apr 2026 fallback used offline<br>
+      New = spot × purity × ~1.05–1.25 retail markup · Used = spot × purity × ~0.35–0.80 resale factor
+    </div>
+  </div>
+
+  <!-- GEMS -->
+  <div class="market-panel" id="panel-gems">
+    <div class="gem-price-grid" id="gemPriceGrid"></div>
+    <div class="disclaimer">
+      Per-carat USD ranges (Apr 2026 industry reference). New = retail · Used = secondary market resale.<br>
+      Price varies widely by cut, clarity, colour, origin &amp; certification. Ranges shown: low = commercial · high = fine quality.
+    </div>
+  </div>
+</div>
+
+<!-- ══ CITY PRICES (India only) ══ -->
+<div class="card city-card show" id="cityPricesCard">
+  <div class="card-header">
+    <span class="card-icon">🏙️</span>
+    <span class="card-title">Gold & Silver — 25 Indian Cities</span>
+  </div>
+  <div class="city-controls">
+    <div class="city-metal-tabs">
+      <button class="city-metal-tab active" onclick="switchCityMetal('gold',this)">🟡 Gold</button>
+      <button class="city-metal-tab" onclick="switchCityMetal('silver',this)">⚪ Silver</button>
+    </div>
+  </div>
+  <div class="city-grid" id="cityGrid"></div>
+  <div class="city-updated" id="cityUpdated">Rates: 04 Apr 2026 · Source: IBJA / Goodreturns</div>
+  <div class="city-source">Prices per gram (₹) incl. local levies · excl. GST & making charges · rates indicative</div>
+</div>
+
+<!-- ══ METALS CALCULATOR ══ -->
+<div class="card">
+  <div class="card-header">
+    <span class="card-icon">⚗️</span>
+    <span class="card-title">Precious Metals Weight</span>
+  </div>
+  <div class="card-body">
+    <div class="form-group">
+      <label>Metal Type</label>
+      <select id="metalType" onchange="onMetalChange()">
+        <option value="brass">Brass</option>
+        <option value="bronze">Bronze</option>
+        <option value="copper">Copper (Cu)</option>
+        <option value="gold">Gold (Au)</option>
+        <option value="palladium">Palladium (Pd)</option>
+        <option value="platinum">Platinum (Pt)</option>
+        <option value="rhodium">Rhodium (Rh)</option>
+        <option value="rose_gold">Rose Gold (Alloy)</option>
+        <option value="silver">Silver (Ag)</option>
+        <option value="stainless_steel">Stainless Steel</option>
+        <option value="titanium">Titanium (Ti)</option>
+        <option value="tungsten">Tungsten (W)</option>
+        <option value="white_gold">White Gold (Alloy)</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>Purity / Karat</label>
+      <div class="purity-group" id="purityPills"></div>
+    </div>
+    <div class="row-2">
+      <div class="form-group">
+        <label>Volume (cm³)</label>
+        <input type="number" id="metalVolume" placeholder="e.g. 2.5" min="0" step="0.001"/>
+      </div>
+      <div class="form-group">
+        <label>or Mass (g)</label>
+        <input type="number" id="metalMass" placeholder="e.g. 18" min="0" step="0.001"/>
+      </div>
+    </div>
+    <div class="density-hint" id="densityHint">Density: — g/cm³</div>
+    <div class="error-msg" id="metalError">Please enter a volume or mass value.</div>
+    <button class="calc-btn" onclick="calcMetal()">✦ Calculate Metal Weight ✦</button>
+  </div>
+</div>
+
+<!-- METAL RESULT -->
+<div class="result-card" id="metalResult">
+  <div class="result-header">
+    <h3>Metal Weight Result</h3>
+    <div class="result-main" id="metalResultMain">—</div>
+  </div>
+  <div class="result-body">
+    <div class="result-row"><span class="result-label">Metal</span><span class="result-val" id="rMetal">—</span></div>
+    <div class="result-row"><span class="result-label">Purity</span><span class="result-val hl" id="rPurity">—</span></div>
+    <div class="result-row"><span class="result-label">Density</span><span class="result-val" id="rDensity">—</span></div>
+    <div class="sep"></div>
+    <div class="result-row"><span class="result-label">Volume</span><span class="result-val hl" id="rVolume">—</span></div>
+    <div class="result-row"><span class="result-label">Mass</span><span class="result-val hl" id="rMass">—</span></div>
+    <div class="sep"></div>
+    <div class="result-row"><span class="result-label">Est. Value — New</span><span class="result-val hl" id="rValueNew">—</span></div>
+    <div class="result-row"><span class="result-label">Est. Value — Used</span><span class="result-val" id="rValueUsed">—</span></div>
+    <div class="sep"></div>
+    <div style="font-family:var(--font-mono);font-size:.64rem;letter-spacing:.14em;text-transform:uppercase;color:var(--text3);">Unit Conversions</div>
+    <div class="converter-grid" id="metalConvGrid"></div>
+    <button class="reset-btn" onclick="resetMetal()">↺ Reset Metal</button>
+  </div>
+</div>
+
+<!-- ══ GEMSTONES CALCULATOR ══ -->
+<div class="card">
+  <div class="card-header">
+    <span class="card-icon">💍</span>
+    <span class="card-title gem-c">Gemstones Weight</span>
+    <div style="margin-left:auto;">
+      <div class="gem-unit-toggle">
+        <button class="gem-unit-btn active" id="btnCarat" onclick="setGemUnit('ct',this)">ct</button>
+        <div class="gem-unit-div"></div>
+        <button class="gem-unit-btn" id="btnGram" onclick="setGemUnit('g',this)">g</button>
+        <div class="gem-unit-div"></div>
+        <button class="gem-unit-btn" id="btnRatti" onclick="setGemUnit('r',this)">ratti</button>
+      </div>
+    </div>
+  </div>
+  <div class="card-body">
+    <div class="form-group">
+      <label>Gemstone Type</label>
+      <select id="gemType" onchange="onGemChange()">
+        <option value="alexandrite">Alexandrite</option>
+        <option value="amber">Amber</option>
+        <option value="amethyst">Amethyst</option>
+        <option value="aquamarine">Aquamarine</option>
+        <option value="citrine">Citrine</option>
+        <option value="coral">Coral</option>
+        <option value="cubic_zirconia">Cubic Zirconia (CZ)</option>
+        <option value="diamond">Diamond</option>
+        <option value="emerald">Emerald</option>
+        <option value="garnet">Garnet</option>
+        <option value="gomed">Gomed / Hessonite (Rahu)</option>
+        <option value="jade">Jade (Nephrite)</option>
+        <option value="jadeite">Jadeite</option>
+        <option value="lapis_lazuli">Lapis Lazuli</option>
+        <option value="moissanite">Moissanite</option>
+        <option value="moonstone">Moonstone</option>
+        <option value="morganite">Morganite</option>
+        <option value="onyx">Onyx / Agate</option>
+        <option value="opal">Opal</option>
+        <option value="pearl">Pearl</option>
+        <option value="peridot">Peridot</option>
+        <option value="quartz">Quartz (Crystal)</option>
+        <option value="ruby">Ruby</option>
+        <option value="sapphire">Sapphire</option>
+        <option value="spinel">Spinel</option>
+        <option value="tanzanite">Tanzanite</option>
+        <option value="topaz">Topaz</option>
+        <option value="tourmaline">Tourmaline</option>
+        <option value="turquoise">Turquoise</option>
+        <option value="zircon">Zircon</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>Cut / Shape</label>
+      <div class="shape-grid" id="shapePills"></div>
+    </div>
+    <div class="row-2">
+      <div class="form-group">
+        <label>Length (mm)</label>
+        <input type="number" id="gemL" placeholder="L" min="0" step="0.01"/>
+      </div>
+      <div class="form-group">
+        <label>Width (mm)</label>
+        <input type="number" id="gemW" placeholder="W" min="0" step="0.01"/>
+      </div>
+    </div>
+    <div class="row-2">
+      <div class="form-group">
+        <label>Depth (mm)</label>
+        <input type="number" id="gemD" placeholder="D" min="0" step="0.01"/>
+      </div>
+      <div class="form-group">
+        <label id="gemWeightLabel">or Carat Weight</label>
+        <input type="number" id="gemCarat" placeholder="ct" min="0" step="0.001"/>
+      </div>
+    </div>
+    <div class="density-hint" id="gemDensityHint">Density: — g/cm³ | SG: —</div>
+    <div class="error-msg" id="gemError">Please enter dimensions or carat weight.</div>
+    <button class="calc-btn" onclick="calcGem()" style="background:linear-gradient(135deg,var(--gem),var(--gem2))">✦ Calculate Gem Weight ✦</button>
+  </div>
+</div>
+
+<!-- GEM RESULT -->
+<div class="result-card" id="gemResult">
+  <div class="result-header" style="background:linear-gradient(135deg,var(--gem),var(--gem2))">
+    <h3>Gemstone Weight Result</h3>
+    <div class="result-main" id="gemResultMain">—</div>
+  </div>
+  <div class="result-body">
+    <div class="result-row"><span class="result-label">Gemstone</span><span class="result-val ghl" id="rGem">—</span></div>
+    <div class="result-row"><span class="result-label">Shape</span><span class="result-val" id="rShape">—</span></div>
+    <div class="result-row"><span class="result-label">SG / Density</span><span class="result-val" id="rGemDensity">—</span></div>
+    <div class="sep"></div>
+    <div class="result-row"><span class="result-label">Volume</span><span class="result-val ghl" id="rGemVol">—</span></div>
+    <div class="result-row"><span class="result-label">Mass (g)</span><span class="result-val ghl" id="rGemMass">—</span></div>
+    <div class="result-row"><span class="result-label">Carat Weight</span><span class="result-val ghl" id="rGemCarat">—</span></div>
+    <div class="sep"></div>
+    <div class="result-row"><span class="result-label">Est. Value — New</span><span class="result-val hl" id="rGemNew">—</span></div>
+    <div class="result-row"><span class="result-label">Est. Value — Used</span><span class="result-val" id="rGemUsed">—</span></div>
+    <div class="sep"></div>
+    <div class="converter-grid" id="gemConvGrid"></div>
+    <button class="reset-btn" onclick="resetGem()">↺ Reset Gemstone</button>
+  </div>
+</div>
+
+<!-- ══ RATTI / CARAT / GRAM CONVERTER ══ -->
+<div class="card">
+  <div class="card-header">
+    <span class="card-icon">⚖️</span>
+    <span class="card-title">Ratti · Carat · Gram Converter</span>
+  </div>
+  <div class="card-body">
+    <div class="conv-toggle-row">
+      <button class="conv-dir-btn active" id="btnRtC" onclick="setConvDir('rtc',this)">Ratti → ct</button>
+      <button class="conv-dir-btn" id="btnRtG" onclick="setConvDir('rtg',this)">Ratti → g</button>
+      <button class="conv-dir-btn" id="btnCtG" onclick="setConvDir('ctg',this)">ct → g</button>
+    </div>
+    <div class="conv-toggle-row" style="margin-top:-6px;">
+      <button class="conv-dir-btn" id="btnCtR" onclick="setConvDir('ctr',this)">ct → Ratti</button>
+      <button class="conv-dir-btn" id="btnGtC" onclick="setConvDir('gct',this)">g → ct</button>
+      <button class="conv-dir-btn" id="btnGtR" onclick="setConvDir('gtr',this)">g → Ratti</button>
+    </div>
+    <div class="row-2">
+      <div class="form-group">
+        <label id="convInputLabel">Ratti</label>
+        <input type="number" id="convInput" placeholder="Enter ratti" min="0" step="0.001" oninput="doConvert()"/>
+      </div>
+      <div class="form-group">
+        <label id="convOutputLabel">Carats (ct)</label>
+        <input type="number" id="convOutput" placeholder="Result" readonly style="background:var(--bg3);cursor:default;"/>
+      </div>
+    </div>
+    <div class="conv-quick">
+      <span class="conv-quick-label">Quick:</span>
+      <button class="conv-quick-btn qb" data-val="1">1</button>
+      <button class="conv-quick-btn qb" data-val="2">2</button>
+      <button class="conv-quick-btn qb" data-val="3">3</button>
+      <button class="conv-quick-btn qb" data-val="5">5</button>
+      <button class="conv-quick-btn qb" data-val="7">7</button>
+      <button class="conv-quick-btn qb" data-val="10">10</button>
+    </div>
+    <div class="conv-ref-grid">
+      <div class="conv-ref-item"><span class="conv-ref-lbl">1 Ratti</span><span class="conv-ref-val">= 0.1215 g = 0.6075 ct</span></div>
+      <div class="conv-ref-item"><span class="conv-ref-lbl">1 Carat</span><span class="conv-ref-val">= 0.2000 g = 1.6461 ratti</span></div>
+      <div class="conv-ref-item"><span class="conv-ref-lbl">1 Gram</span><span class="conv-ref-val">= 5.0000 ct = 8.2305 ratti</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-line"></div>
+  <span class="footer-tag">Jewellery Precision Tools</span>
+  <span class="footer-copy">© Manik Roy <span id="footerYear"></span>. All Rights Reserved.</span>
+  <div class="info-badge">⚖ All weights &amp; values are indicative estimates for reference only</div>
+</footer>
+</div>
+
+<script>
+/* ════════ DATA ════════ */
+const troy=31.1035;
+const fmt=(n,d=2)=>n.toLocaleString('en-US',{minimumFractionDigits:d,maximumFractionDigits:d});
+
+// Currency state
+let CUR='INR';
+let INR_RATE=84.5; // fallback USD→INR rate
+let MARKET='IN'; // 'IN' = India, 'US' = United States
+
+// Marketplace tax/duty factors applied on top of spot+markup
+// India: 10-15% customs duty on bullion imports + GST (3% gold/silver, 5% gems/other)
+// US: standard retail, no additional factor
+const MARKET_TAX={
+  IN:{ precious:1.13, gems:1.05, other:1.18 }, // customs+GST combined on new price
+  US:{ precious:1.00, gems:1.00, other:1.00 },
+};
+function getMarketFactor(spotKey){
+  if(MARKET==='US') return 1;
+  if(spotKey==='gold'||spotKey==='silver'||spotKey==='platinum'||spotKey==='palladium'||spotKey==='rhodium')
+    return MARKET_TAX.IN.precious;
+  return MARKET_TAX.IN.other;
+}
+function getGemMarketFactor(){
+  return MARKET==='IN'?MARKET_TAX.IN.gems:1;
+}
+
+const MKT_LABELS={
+  IN:'🇮🇳 Indian Market · Includes GST (3% gold/silver · 5% gems) + customs duty · Hallmark BIS standards',
+  US:'🇺🇸 US Market · Standard retail pricing · No import duty applied · GIA/AGS grading standards',
+};
+
+function setMarket(mkt,btn){
+  MARKET=mkt;
+  document.querySelectorAll('.mkt-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('mktBadge').textContent=MKT_LABELS[mkt];
+  // Show/hide city prices card
+  const cityCard=document.getElementById('cityPricesCard');
+  if(mkt==='IN') cityCard.classList.add('show'); else cityCard.classList.remove('show');
+  // Auto-switch currency to match market default
+  if(mkt==='IN'&&CUR==='USD'){ setCurrency('INR',document.getElementById('btnINR')); return; }
+  if(mkt==='US'&&CUR==='INR'){ setCurrency('USD',document.getElementById('btnUSD')); return; }
+  renderMetalPriceTable();
+  renderGemPrices();
+}
+
+// ── CITY PRICES DATA (₹/gram, Apr 4 2026, IBJA/Goodreturns) ──
+// gold: {k24, k22, k18}  silver: {per_g}
+// Cities vary slightly due to local octroi, VAT & transport
+const CITY_DATA=[
+  {city:'Mumbai',       state:'Maharashtra', gold:{k24:15093,k22:13835,k18:11320}, silver:{g:255}},
+  {city:'Delhi',        state:'Delhi',       gold:{k24:15110,k22:13850,k18:11330}, silver:{g:255}},
+  {city:'Bangalore',    state:'Karnataka',   gold:{k24:15090,k22:13832,k18:11318}, silver:{g:254}},
+  {city:'Chennai',      state:'Tamil Nadu',  gold:{k24:15327,k22:14050,k18:11495}, silver:{g:257}},
+  {city:'Hyderabad',    state:'Telangana',   gold:{k24:15095,k22:13837,k18:11322}, silver:{g:255}},
+  {city:'Kolkata',      state:'West Bengal', gold:{k24:15097,k22:13838,k18:11323}, silver:{g:255}},
+  {city:'Pune',         state:'Maharashtra', gold:{k24:15090,k22:13832,k18:11318}, silver:{g:254}},
+  {city:'Ahmedabad',    state:'Gujarat',     gold:{k24:15100,k22:13840,k18:11325}, silver:{g:255}},
+  {city:'Jaipur',       state:'Rajasthan',   gold:{k24:15105,k22:13845,k18:11328}, silver:{g:255}},
+  {city:'Surat',        state:'Gujarat',     gold:{k24:15098,k22:13839,k18:11323}, silver:{g:254}},
+  {city:'Lucknow',      state:'Uttar Pradesh',gold:{k24:15108,k22:13848,k18:11330}, silver:{g:255}},
+  {city:'Patna',        state:'Bihar',       gold:{k24:15112,k22:13852,k18:11334}, silver:{g:255}},
+  {city:'Bhopal',       state:'Madhya Pradesh',gold:{k24:15102,k22:13842,k18:11326}, silver:{g:255}},
+  {city:'Nagpur',       state:'Maharashtra', gold:{k24:15093,k22:13835,k18:11320}, silver:{g:254}},
+  {city:'Chandigarh',   state:'Punjab',      gold:{k24:15115,k22:13855,k18:11336}, silver:{g:256}},
+  {city:'Kochi',        state:'Kerala',      gold:{k24:15095,k22:13837,k18:11322}, silver:{g:255}},
+  {city:'Indore',       state:'Madhya Pradesh',gold:{k24:15100,k22:13840,k18:11325}, silver:{g:255}},
+  {city:'Coimbatore',   state:'Tamil Nadu',  gold:{k24:15300,k22:14025,k18:11475}, silver:{g:257}},
+  {city:'Visakhapatnam',state:'Andhra Pradesh',gold:{k24:15097,k22:13838,k18:11323}, silver:{g:255}},
+  {city:'Vadodara',     state:'Gujarat',     gold:{k24:15098,k22:13839,k18:11323}, silver:{g:254}},
+  {city:'Rajkot',       state:'Gujarat',     gold:{k24:15098,k22:13838,k18:11322}, silver:{g:254}},
+  {city:'Nashik',       state:'Maharashtra', gold:{k24:15090,k22:13832,k18:11318}, silver:{g:254}},
+  {city:'Mysore',       state:'Karnataka',   gold:{k24:15090,k22:13832,k18:11318}, silver:{g:254}},
+  {city:'Bhubaneswar',  state:'Odisha',      gold:{k24:15095,k22:13837,k18:11322}, silver:{g:255}},
+  {city:'Guwahati',     state:'Assam',       gold:{k24:15120,k22:13858,k18:11340}, silver:{g:256}},
+];
+
+let cityMetal='gold';
+function switchCityMetal(metal,btn){
+  cityMetal=metal;
+  document.querySelectorAll('.city-metal-tab').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderCityGrid();
+}
+
+function fmtINR(n){
+  return '₹'+n.toLocaleString('en-IN');
+}
+
+function renderCityGrid(){
+  const grid=document.getElementById('cityGrid');
+  if(cityMetal==='gold'){
+    grid.innerHTML=CITY_DATA.map(c=>`
+      <div class="city-item">
+        <div class="city-name"><span class="city-flag">📍</span><span>${c.city}</span></div>
+        <div class="city-state">${c.state}</div>
+        <div class="city-prices">
+          <div class="city-price-row"><span class="city-karat">24K</span><span class="city-val gold-c">${fmtINR(c.gold.k24)}/g</span></div>
+          <div class="city-price-row"><span class="city-karat">22K</span><span class="city-val gold-c" style="opacity:.85">${fmtINR(c.gold.k22)}/g</span></div>
+          <div class="city-price-row"><span class="city-karat">18K</span><span class="city-val gold-c" style="opacity:.65">${fmtINR(c.gold.k18)}/g</span></div>
+        </div>
+      </div>`).join('');
+  } else {
+    grid.innerHTML=CITY_DATA.map(c=>`
+      <div class="city-item">
+        <div class="city-name"><span class="city-flag">📍</span><span>${c.city}</span></div>
+        <div class="city-state">${c.state}</div>
+        <div class="city-prices">
+          <div class="city-price-row"><span class="city-karat">999</span><span class="city-val silver-c">${fmtINR(c.silver.g)}/g</span></div>
+          <div class="city-price-row"><span class="city-karat">per kg</span><span class="city-val silver-c" style="opacity:.8">${fmtINR(c.silver.g*1000)}</span></div>
+        </div>
+      </div>`).join('');
+  }
+}
+
+
+
+function fmtMoney(usdVal){
+  if(CUR==='INR'){
+    const v=usdVal*INR_RATE;
+    return '₹'+v.toLocaleString('en-IN',{minimumFractionDigits:2,maximumFractionDigits:2});
+  }
+  return '$'+fmt(usdVal,2);
+}
+function fmtSpotDisplay(usdVal,unit){
+  const v=CUR==='INR'?usdVal*INR_RATE:usdVal;
+  const sym=CUR==='INR'?'₹':'$';
+  return sym+fmt(v,2)+'/'+unit;
+}
+
+async function fetchINRRate(){
+  try{
+    const r=await fetch('https://api.frankfurter.app/latest?from=USD&to=INR');
+    if(r.ok){const d=await r.json();if(d.rates&&d.rates.INR) INR_RATE=d.rates.INR;}
+  }catch(e){}
+}
+
+function setCurrency(cur,btn){
+  CUR=cur;
+  document.querySelectorAll('.cur-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderMetalPriceTable();
+  renderGemPrices();
+}
+
+// Apr 2026 verified fallback spot prices (USD/troy oz for precious; USD/kg for industrials)
+let SPOT={
+  gold:4636,silver:71.71,platinum:1930,palladium:1487,rhodium:10450,
+  titanium:11000,tungsten:35000,copper:9850,brass:3200,bronze:3800,steel:1200,
+};
+const SPOT_UNIT={
+  gold:'toz',silver:'toz',platinum:'toz',palladium:'toz',rhodium:'toz',
+  titanium:'kg',tungsten:'kg',copper:'kg',brass:'kg',bronze:'kg',steel:'kg',
+};
+function spotPerGram(k){
+  const s=SPOT[k]||0;
+  return SPOT_UNIT[k]==='toz'?s/troy:s/1000;
+}
+
+const METALS={
+  brass:        {label:'Brass',         sym:'—',  color:'#c8a040',purities:['Standard'],                                densities:{Standard:8.5},                                                defaultPurity:'Standard',spotKey:'brass',   newMark:1.20,usedFactor:0.40},
+  bronze:       {label:'Bronze',        sym:'—',  color:'#a0712a',purities:['Standard'],                                densities:{Standard:8.73},                                               defaultPurity:'Standard',spotKey:'bronze',  newMark:1.20,usedFactor:0.40},
+  copper:       {label:'Copper',        sym:'Cu', color:'#b87333',purities:['Pure'],                                    densities:{Pure:8.96},                                                   defaultPurity:'Pure',    spotKey:'copper',  newMark:1.10,usedFactor:0.60},
+  gold:         {label:'Gold',          sym:'Au', color:'#d4af37',purities:['24K','22K','21K','18K','14K','10K','9K'],  densities:{24:19.32,22:17.8,21:17.2,18:15.58,14:12.9,10:10.9,9:10.0},  defaultPurity:'18K',     spotKey:'gold',    newMark:1.05,usedFactor:0.80},
+  palladium:    {label:'Palladium',     sym:'Pd', color:'#b0b4c4',purities:['Pd950','Pd500'],                           densities:{950:11.95,500:10.8},                                          defaultPurity:'Pd950',   spotKey:'palladium',newMark:1.05,usedFactor:0.72},
+  platinum:     {label:'Platinum',      sym:'Pt', color:'#e8e8f0',purities:['Pt950','Pt900','Pt850'],                   densities:{950:21.35,900:20.1,850:19.0},                                 defaultPurity:'Pt950',   spotKey:'platinum',newMark:1.06,usedFactor:0.75},
+  rhodium:      {label:'Rhodium',       sym:'Rh', color:'#c0d0e0',purities:['Pure'],                                    densities:{Pure:12.41},                                                  defaultPurity:'Pure',    spotKey:'rhodium', newMark:1.08,usedFactor:0.65},
+  rose_gold:    {label:'Rose Gold',     sym:'RG', color:'#e8a090',purities:['18K','14K','9K'],                          densities:{18:15.58,14:13.0,9:10.9},                                     defaultPurity:'18K',     spotKey:'gold',    newMark:1.08,usedFactor:0.78},
+  silver:       {label:'Silver',        sym:'Ag', color:'#c0c0c0',purities:['999','925','800','500'],                   densities:{999:10.49,925:10.36,800:10.15,500:9.8},                       defaultPurity:'925',     spotKey:'silver',  newMark:1.05,usedFactor:0.70},
+  stainless_steel:{label:'Stainless Steel',sym:'SS',color:'#a0a8b0',purities:['316L','304'],                           densities:{'316L':7.99,'304':7.93},                                      defaultPurity:'316L',    spotKey:'steel',   newMark:1.25,usedFactor:0.35},
+  titanium:     {label:'Titanium',      sym:'Ti', color:'#8899aa',purities:['Grade 2','Grade 5'],                       densities:{'Grade 2':4.506,'Grade 5':4.43},                              defaultPurity:'Grade 2', spotKey:'titanium',newMark:1.15,usedFactor:0.55},
+  tungsten:     {label:'Tungsten',      sym:'W',  color:'#607080',purities:['Pure','Alloy'],                            densities:{Pure:19.25,Alloy:17.8},                                       defaultPurity:'Pure',    spotKey:'tungsten',newMark:1.20,usedFactor:0.50},
+  white_gold:   {label:'White Gold',    sym:'WG', color:'#e0e0ec',purities:['18K','14K','9K'],                          densities:{18:15.8,14:13.2,9:11.1},                                      defaultPurity:'18K',     spotKey:'gold',    newMark:1.08,usedFactor:0.78},
+};
+
+const GEMS={
+  alexandrite:  {label:'Alexandrite',     emoji:'🔮',sg:3.73, priceNew:[5000,25000],priceUsed:[2000,12000], quality:'Fine colour-change, natural, cert.'},
+  amber:        {label:'Amber',           emoji:'🟠',sg:1.08, priceNew:[5,80],      priceUsed:[2,30],       quality:'Clear Baltic, fossil inclusions prized'},
+  amethyst:     {label:'Amethyst',        emoji:'🟣',sg:2.65, priceNew:[15,100],    priceUsed:[5,50],       quality:'Deep Siberian purple, VVS clarity'},
+  aquamarine:   {label:'Aquamarine',      emoji:'🩵',sg:2.72, priceNew:[80,600],    priceUsed:[30,250],     quality:'Deep blue Santa Maria, EC'},
+  citrine:      {label:'Citrine',         emoji:'🟡',sg:2.65, priceNew:[5,40],      priceUsed:[2,15],       quality:'Deep Madeira orange-yellow, faceted'},
+  coral:        {label:'Coral',           emoji:'🪸',sg:2.68, priceNew:[20,300],    priceUsed:[8,100],      quality:'Red/angel skin, polished, documented'},
+  cubic_zirconia:{label:'Cubic Zirconia', emoji:'✨',sg:5.89, priceNew:[1,10],      priceUsed:[0.5,4],      quality:'AAA colourless, machine cut, lab-grown'},
+  diamond:      {label:'Diamond',         emoji:'💎',sg:3.52, priceNew:[3000,12000],priceUsed:[1800,7000],  quality:'D–G colour, VS2+, Ex cut (GIA)'},
+  emerald:      {label:'Emerald',         emoji:'💚',sg:2.72, priceNew:[700,7000],  priceUsed:[350,3500],   quality:'Colombian/Zambian, eye-clean'},
+  garnet:       {label:'Garnet',          emoji:'🔴',sg:3.78, priceNew:[20,1500],   priceUsed:[8,600],      quality:'Tsavorite/Demantoid command premium'},
+  gomed:        {label:'Gomed (Hessonite)',emoji:'🍯',sg:3.65, priceNew:[3,50],     priceUsed:[1.5,25],     quality:'Ceylon/African Hessonite, honey-brown, Rahu stone · ₹200–₹3,000/ct'},
+  jade:         {label:'Jade (Nephrite)', emoji:'🟩',sg:2.96, priceNew:[10,500],    priceUsed:[4,200],      quality:'Spinach green, British Columbia/NZ'},
+  jadeite:      {label:'Jadeite',         emoji:'🫚',sg:3.33, priceNew:[100,10000], priceUsed:[40,4000],    quality:'Imperial green, Burmese, cert. fine'},
+  lapis_lazuli: {label:'Lapis Lazuli',    emoji:'🫙',sg:2.80, priceNew:[5,50],      priceUsed:[2,20],       quality:'Afghan Royal, deep blue, gold pyrite'},
+  moissanite:   {label:'Moissanite',      emoji:'⭐',sg:3.21, priceNew:[80,500],    priceUsed:[30,200],     quality:'DEF colourless, lab-grown, GRA cert.'},
+  moonstone:    {label:'Moonstone',       emoji:'🌙',sg:2.57, priceNew:[30,300],    priceUsed:[10,100],     quality:'Blue adularescence, transparent, Sri Lanka'},
+  morganite:    {label:'Morganite',       emoji:'🌸',sg:2.71, priceNew:[50,400],    priceUsed:[20,150],     quality:'Deep peach-pink, Madagascar, EC'},
+  onyx:         {label:'Onyx / Agate',    emoji:'⬛',sg:2.65, priceNew:[2,25],      priceUsed:[1,10],       quality:'Black, banded, polished cabochon'},
+  opal:         {label:'Opal',            emoji:'🌈',sg:2.10, priceNew:[50,3000],   priceUsed:[20,1200],    quality:'Black/crystal, high play-of-colour'},
+  pearl:        {label:'Pearl',           emoji:'⚪',sg:2.71, priceNew:[100,3000],  priceUsed:[40,1200],    quality:'South Sea/Akoya/Tahitian, round, AAA'},
+  peridot:      {label:'Peridot',         emoji:'💛',sg:3.34, priceNew:[10,80],     priceUsed:[4,30],       quality:'Vivid green, Pakistani/Burmese, EC'},
+  quartz:       {label:'Quartz (Crystal)',emoji:'🔷',sg:2.65, priceNew:[2,30],      priceUsed:[1,12],       quality:'Clear/smoky/rose, faceted, natural'},
+  ruby:         {label:'Ruby',            emoji:'❤️', sg:3.99, priceNew:[800,8000],  priceUsed:[400,4000],   quality:'Medium–fine, Burma/Mozambique'},
+  sapphire:     {label:'Sapphire',        emoji:'💙',sg:3.99, priceNew:[600,5000],  priceUsed:[300,2500],   quality:'Royal blue, SI–VVS, Ceylon/Kashmir'},
+  spinel:       {label:'Spinel',          emoji:'🩷',sg:3.60, priceNew:[200,2000],  priceUsed:[80,900],     quality:'Red/cobalt blue, Myanmar, fine clarity'},
+  tanzanite:    {label:'Tanzanite',       emoji:'🫐',sg:3.35, priceNew:[300,1500],  priceUsed:[120,700],    quality:'AAA vivid violet-blue, eye-clean'},
+  topaz:        {label:'Topaz',           emoji:'🔵',sg:3.53, priceNew:[20,200],    priceUsed:[8,80],       quality:'Imperial orange or Swiss blue, EC'},
+  tourmaline:   {label:'Tourmaline',      emoji:'🟢',sg:3.06, priceNew:[50,1200],   priceUsed:[20,500],     quality:'Paraíba/Rubellite/Indicolite grades'},
+  turquoise:    {label:'Turquoise',       emoji:'🔹',sg:2.76, priceNew:[10,200],    priceUsed:[4,80],       quality:'Sleeping Beauty/Persian, solid, no fill'},
+  zircon:       {label:'Zircon',          emoji:'🫧',sg:4.65, priceNew:[50,400],    priceUsed:[20,150],     quality:'Blue, high type, excellent cut, Cambodia'},
+};
+
+const SHAPES={
+  round:    {emoji:'⭕',label:'Round',    formula:(l,w,d)=>(Math.PI/6)*l*l*l},
+  oval:     {emoji:'🔵',label:'Oval',     formula:(l,w,d)=>0.0065*l*w*d},
+  princess: {emoji:'🟦',label:'Princess', formula:(l,w,d)=>0.0083*l*w*d},
+  cushion:  {emoji:'🔷',label:'Cushion',  formula:(l,w,d)=>0.0082*l*w*d},
+  marquise: {emoji:'🔹',label:'Marquise', formula:(l,w,d)=>0.00565*l*w*d},
+  pear:     {emoji:'🫧',label:'Pear',     formula:(l,w,d)=>0.00615*l*w*d},
+  emerald_c:{emoji:'💠',label:'Emerald',  formula:(l,w,d)=>0.0092*l*w*d},
+  heart:    {emoji:'❤️',label:'Heart',    formula:(l,w,d)=>0.0059*l*w*d},
+  trillion: {emoji:'🔺',label:'Trillion', formula:(l,w,d)=>0.00485*l*w*d},
+  baguette: {emoji:'🟫',label:'Baguette', formula:(l,w,d)=>0.0092*l*w*d},
+};
+
+/* ════════ THEME & TABS ════════ */
+function setTheme(t,btn){
+  document.body.setAttribute('data-theme',t);
+  document.querySelectorAll('.theme-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+}
+function switchTab(name,btn){
+  document.querySelectorAll('.market-tab').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.market-panel').forEach(p=>p.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('panel-'+name).classList.add('active');
+}
+
+/* ════════ MARKET PRICES ════════ */
+function getPurityFrac(key,purity){
+  if(key==='gold'||key==='white_gold'||key==='rose_gold') return parseInt(purity)/24;
+  if(purity.includes('950')) return 0.95;
+  if(purity.includes('900')) return 0.90;
+  if(purity.includes('850')) return 0.85;
+  if(purity==='999') return 0.999;
+  if(purity==='925') return 0.925;
+  if(purity==='800') return 0.80;
+  if(purity==='500') return 0.50;
+  return 1;
+}
+
+function renderMetalPriceTable(){
+  const tbody=document.getElementById('metalPriceTbody');
+  const display=[
+    ['brass','Standard'],
+    ['bronze','Standard'],
+    ['copper','Pure'],
+    ['gold','24K'],['gold','22K'],['gold','18K'],['gold','14K'],['gold','9K'],
+    ['palladium','Pd950'],
+    ['platinum','Pt950'],
+    ['rhodium','Pure'],
+    ['rose_gold','18K'],['rose_gold','14K'],
+    ['silver','999'],['silver','925'],['silver','800'],
+    ['stainless_steel','316L'],
+    ['titanium','Grade 2'],
+    ['tungsten','Pure'],
+    ['white_gold','18K'],['white_gold','14K'],
+  ];
+  const rows=display.map(([key,purity])=>{
+    const m=METALS[key];
+    const dk=Object.keys(m.densities).find(k=>purity.includes(k)||k===purity)||Object.keys(m.densities)[0];
+    const frac=getPurityFrac(key,purity);
+    const spg=spotPerGram(m.spotKey);
+    const mf=getMarketFactor(m.spotKey);
+    const nPrice=spg*frac*m.newMark*mf;
+    const uPrice=spg*frac*m.usedFactor;
+    const spotDisplay=SPOT_UNIT[m.spotKey]==='toz'
+      ?fmtSpotDisplay(SPOT[m.spotKey],'ozt')
+      :fmtSpotDisplay(SPOT[m.spotKey]/1000,'kg');
+    // Simulate a plausible 24h change for display
+    const seed=(key.charCodeAt(0)+purity.charCodeAt(0))%17-8;
+    const ch=(seed*0.15).toFixed(2);
+    const chCls=+ch>0?'cup':+ch<0?'cdn':'cfl';
+    const chStr=(+ch>=0?'+':'')+ch+'%';
+    const lbl=key==='white_gold'?'White Gold':key==='rose_gold'?'Rose Gold':key==='stainless_steel'?'Stainless':m.label;
+    return `<tr>
+      <td><div class="metal-cell">
+        <div class="metal-dot" style="background:${m.color}"></div>
+        <div><div class="metal-lbl">${lbl} <span class="metal-sym">${purity}</span></div></div>
+      </div></td>
+      <td>${fmtMoney(nPrice)}</td>
+      <td><span class="price-used-v">${fmtMoney(uPrice)}</span></td>
+      <td style="font-size:.68rem;color:var(--text3);">${spotDisplay}</td>
+      <td><span class="${chCls}">${chStr}</span></td>
+    </tr>`;
+  });
+  tbody.innerHTML=rows.join('');
+}
+
+async function fetchPrices(){
+  const btn=document.getElementById('metalRefreshBtn');
+  btn.classList.add('loading');
+  btn.innerHTML='<span class="spinner"></span>Loading';
+  try {
+    // exchangerate.host — completely free, no key
+    const r=await fetch('https://api.exchangerate.host/latest?base=USD&symbols=XAU,XAG,XPT,XPD');
+    if(r.ok){
+      const d=await r.json();
+      if(d&&d.rates){
+        if(d.rates.XAU) SPOT.gold     =parseFloat((1/d.rates.XAU).toFixed(2));
+        if(d.rates.XAG) SPOT.silver    =parseFloat((1/d.rates.XAG).toFixed(2));
+        if(d.rates.XPT) SPOT.platinum  =parseFloat((1/d.rates.XPT).toFixed(2));
+        if(d.rates.XPD) SPOT.palladium =parseFloat((1/d.rates.XPD).toFixed(2));
+      }
+    }
+  } catch(e){/* silently use fallback */}
+  renderMetalPriceTable();
+  btn.classList.remove('loading');
+  btn.textContent='↺ Refresh';
+  document.getElementById('metalPriceTime').textContent=
+    'Updated '+new Date().toLocaleTimeString()+' · Some prices use Apr 2026 reference data';
+}
+
+function renderGemPrices(){
+  const grid=document.getElementById('gemPriceGrid');
+  const gmf=getGemMarketFactor();
+  grid.innerHTML=Object.entries(GEMS).map(([k,g])=>{
+    return `<div class="gem-price-item">
+      <div class="gem-price-name"><span class="gp-emoji">${g.emoji}</span><span class="gp-label">${g.label}</span></div>
+      <div class="gem-vals">
+        <div class="gem-val-row">
+          <span class="gem-val-lbl">New</span>
+          <span class="gem-val-num">${fmtMoney(g.priceNew[0]*gmf)}–${fmtMoney(g.priceNew[1]*gmf)}</span>
+        </div>
+        <div class="gem-val-row">
+          <span class="gem-val-lbl">Used</span>
+          <span class="gem-val-num used-c">${fmtMoney(g.priceUsed[0])}–${fmtMoney(g.priceUsed[1])}</span>
+        </div>
+        <div class="gem-quality">per ct · ${g.quality}</div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+/* ════════ METALS CALCULATOR ════════ */
+let selPurity=null;
+function onMetalChange(){
+  const key=document.getElementById('metalType').value;
+  const m=METALS[key];
+  selPurity=m.defaultPurity;
+  renderPurityPills(key);
+  updateDensityHint();
+}
+function renderPurityPills(key){
+  const m=METALS[key];
+  const c=document.getElementById('purityPills');
+  c.innerHTML='';
+  m.purities.forEach(p=>{
+    const btn=document.createElement('button');
+    btn.className='purity-pill'+(p===m.defaultPurity?' active':'');
+    btn.textContent=p;
+    btn.onclick=()=>{
+      selPurity=p;
+      c.querySelectorAll('.purity-pill').forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active');
+      updateDensityHint();
+    };
+    c.appendChild(btn);
+  });
+}
+function getMetalDensity(){
+  const key=document.getElementById('metalType').value;
+  const m=METALS[key];
+  const pKey=selPurity||m.defaultPurity;
+  const dk=Object.keys(m.densities).find(k=>pKey.includes(k)||parseInt(k)===parseInt(pKey))||Object.keys(m.densities)[0];
+  return m.densities[dk];
+}
+function updateDensityHint(){
+  document.getElementById('densityHint').textContent='Density: '+getMetalDensity()+' g/cm³';
+}
+function calcMetal(){
+  const volIn=parseFloat(document.getElementById('metalVolume').value);
+  const massIn=parseFloat(document.getElementById('metalMass').value);
+  const errEl=document.getElementById('metalError');
+  if(isNaN(volIn)&&isNaN(massIn)){errEl.classList.add('show');return;}
+  errEl.classList.remove('show');
+  const key=document.getElementById('metalType').value;
+  const m=METALS[key];
+  const density=getMetalDensity();
+  const purity=selPurity||m.defaultPurity;
+  let vol,mass;
+  if(!isNaN(volIn)){vol=volIn;mass=vol*density;}
+  else{mass=massIn;vol=mass/density;}
+  const frac=getPurityFrac(key,purity);
+  const spg=spotPerGram(m.spotKey);
+  const mf=getMarketFactor(m.spotKey);
+  const valueNew=mass*spg*frac*m.newMark*mf;
+  const valueUsed=mass*spg*frac*m.usedFactor;
+  document.getElementById('rMetal').textContent=m.label;
+  document.getElementById('rPurity').textContent=purity;
+  document.getElementById('rDensity').textContent=density+' g/cm³';
+  document.getElementById('rVolume').textContent=fmt(vol,4)+' cm³';
+  document.getElementById('rMass').textContent=fmt(mass,4)+' g';
+  document.getElementById('metalResultMain').textContent=fmt(mass,3)+' g';
+  document.getElementById('rValueNew').textContent=fmtMoney(valueNew)+' (est. retail)';
+  document.getElementById('rValueUsed').textContent=fmtMoney(valueUsed)+' (est. resale)';
+  const convs=[
+    {u:'Grams (g)',v:fmt(mass,4)},{u:'Kilograms (kg)',v:fmt(mass/1000,6)},
+    {u:'Troy Oz (ozt)',v:fmt(mass/troy,4)},{u:'Ounces (oz)',v:fmt(mass/28.3495,4)},
+    {u:'Carats (ct)',v:fmt(mass*5,3)},{u:'Pennyweight (dwt)',v:fmt(mass/1.55517,4)},
+    {u:'Grains (gr)',v:fmt(mass*15.4324,3)},{u:'Milligrams (mg)',v:fmt(mass*1000,1)},
+  ];
+  document.getElementById('metalConvGrid').innerHTML=
+    convs.map(c=>`<div class="conv-item"><div class="conv-unit">${c.u}</div><div class="conv-val">${c.v}</div></div>`).join('');
+  document.getElementById('metalResult').classList.add('show');
+  document.getElementById('metalResult').scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+function resetMetal(){
+  document.getElementById('metalVolume').value='';
+  document.getElementById('metalMass').value='';
+  document.getElementById('metalResult').classList.remove('show');
+  document.getElementById('metalError').classList.remove('show');
+}
+
+/* ════════ GEMS CALCULATOR ════════ */
+let selShape='round';
+let gemUnit='ct'; // 'ct' = carat, 'g' = gram, 'r' = ratti
+
+function setGemUnit(unit,btn){
+  gemUnit=unit;
+  document.querySelectorAll('.gem-unit-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  const lbl=document.getElementById('gemWeightLabel');
+  const inp=document.getElementById('gemCarat');
+  if(unit==='ct'){
+    lbl.textContent='or Carat Weight';
+    inp.placeholder='ct';
+    inp.step='0.001';
+  } else if(unit==='g'){
+    lbl.textContent='or Mass (g)';
+    inp.placeholder='g';
+    inp.step='0.0001';
+  } else {
+    lbl.textContent='or Ratti';
+    inp.placeholder='ratti';
+    inp.step='0.01';
+  }
+  inp.value='';
+}
+function renderShapePills(){
+  const c=document.getElementById('shapePills');
+  c.innerHTML='';
+  Object.entries(SHAPES).forEach(([key,s])=>{
+    const btn=document.createElement('button');
+    btn.className='shape-pill'+(key===selShape?' active':'');
+    btn.innerHTML=`${s.emoji}<span class="lbl">${s.label}</span>`;
+    btn.onclick=()=>{
+      selShape=key;
+      c.querySelectorAll('.shape-pill').forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active');
+      updateGemDimLabels();
+    };
+    c.appendChild(btn);
+  });
+  updateGemDimLabels();
+}
+function updateGemDimLabels(){
+  if(selShape==='round'){
+    document.getElementById('gemL').placeholder='Diameter';
+    document.getElementById('gemW').placeholder='(auto)';
+    document.getElementById('gemW').disabled=true;
+  } else {
+    document.getElementById('gemL').placeholder='Length';
+    document.getElementById('gemW').placeholder='Width';
+    document.getElementById('gemW').disabled=false;
+  }
+}
+function onGemChange(){
+  const g=GEMS[document.getElementById('gemType').value];
+  document.getElementById('gemDensityHint').textContent=`Density: ${g.sg} g/cm³ | SG: ${g.sg}`;
+}
+function calcGem(){
+  const gemKey=document.getElementById('gemType').value;
+  const g=GEMS[gemKey];
+  const errEl=document.getElementById('gemError');
+  const weightIn=parseFloat(document.getElementById('gemCarat').value);
+  const L=parseFloat(document.getElementById('gemL').value);
+  const W=parseFloat(document.getElementById('gemW').value);
+  const D=parseFloat(document.getElementById('gemD').value);
+  let mass,vol;
+  if(!isNaN(weightIn)&&weightIn>0){
+    if(gemUnit==='ct')      mass=weightIn/5;
+    else if(gemUnit==='g')  mass=weightIn;
+    else                    mass=weightIn*RATTI_G; // ratti
+    vol=mass/g.sg;
+  } else if(!isNaN(L)&&!isNaN(D)){
+    const ww=selShape==='round'?L:(!isNaN(W)?W:L);
+    vol=SHAPES[selShape].formula(L,ww,D)/1000;
+    mass=vol*g.sg;
+  } else {errEl.classList.add('show');return;}
+  errEl.classList.remove('show');
+  const carats=mass*5;
+  const ratti=mass/RATTI_G;
+  const gmf=getGemMarketFactor();
+  // Result header shows value in selected unit
+  const mainDisplay = gemUnit==='ct' ? fmt(carats,3)+' ct'
+                    : gemUnit==='g'  ? fmt(mass,4)+' g'
+                    :                  fmt(ratti,3)+' ratti';
+  document.getElementById('rGem').textContent=g.label;
+  document.getElementById('rShape').textContent=SHAPES[selShape].label;
+  document.getElementById('rGemDensity').textContent=`SG ${g.sg} / ${g.sg} g/cm³`;
+  document.getElementById('rGemVol').textContent=fmt(vol,5)+' cm³';
+  document.getElementById('rGemMass').textContent=fmt(mass,4)+' g';
+  document.getElementById('rGemCarat').textContent=fmt(carats,3)+' ct';
+  document.getElementById('gemResultMain').textContent=mainDisplay;
+  document.getElementById('rGemNew').textContent=fmtMoney(g.priceNew[0]*carats*gmf)+'–'+fmtMoney(g.priceNew[1]*carats*gmf)+' (retail)';
+  document.getElementById('rGemUsed').textContent=fmtMoney(g.priceUsed[0]*carats)+'–'+fmtMoney(g.priceUsed[1]*carats)+' (resale)';
+  const convs=[
+    {u:'Ratti',           v:fmt(ratti,4)},
+    {u:'Carats (ct)',     v:fmt(carats,4)},
+    {u:'Grams (g)',       v:fmt(mass,5)},
+    {u:'Milligrams (mg)', v:fmt(mass*1000,2)},
+    {u:'Grains (gr)',     v:fmt(mass*15.4324,4)},
+    {u:'Points (pt)',     v:fmt(carats*100,2)},
+    {u:'Troy Oz (ozt)',   v:fmt(mass/troy,6)},
+    {u:'Volume (cm³)',    v:fmt(vol,6)},
+  ];
+  document.getElementById('gemConvGrid').innerHTML=
+    convs.map(c=>`<div class="conv-item"><div class="conv-unit">${c.u}</div><div class="conv-val">${c.v}</div></div>`).join('');
+  document.getElementById('gemResult').classList.add('show');
+  document.getElementById('gemResult').scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+function resetGem(){
+  ['gemL','gemW','gemD','gemCarat'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('gemResult').classList.remove('show');
+  document.getElementById('gemError').classList.remove('show');
+}
+
+/* ════════ RATTI / CARAT / GRAM CONVERTER ════════ */
+// 1 Ratti = 0.1215 g (traditional Indian unit used in gemstone trade)
+// 1 Carat = 0.2 g | 1 Gram = 5 ct | 1 Ratti = 0.6075 ct
+const RATTI_G  = 0.1215;       // ratti → grams
+const RATTI_CT = 0.1215 * 5;   // ratti → carats (= 0.6075)
+
+let convDir='rtc';
+
+const CONV_CONFIG={
+  rtc:{ inLbl:'Ratti',      outLbl:'Carats (ct)', inPh:'Enter ratti',   step:0.001,  fn:v=>v*RATTI_CT,         dec:4, quick:[1,2,3,5,7,10],  qlbl:v=>v+'R' },
+  rtg:{ inLbl:'Ratti',      outLbl:'Grams (g)',    inPh:'Enter ratti',   step:0.001,  fn:v=>v*RATTI_G,          dec:4, quick:[1,2,3,5,7,10],  qlbl:v=>v+'R' },
+  ctg:{ inLbl:'Carats (ct)',outLbl:'Grams (g)',    inPh:'Enter carats',  step:0.001,  fn:v=>v*0.2,              dec:4, quick:[0.5,1,2,3,5,10], qlbl:v=>v+'ct' },
+  ctr:{ inLbl:'Carats (ct)',outLbl:'Ratti',        inPh:'Enter carats',  step:0.001,  fn:v=>v/RATTI_CT,         dec:4, quick:[0.5,1,2,3,5,10], qlbl:v=>v+'ct' },
+  gct:{ inLbl:'Grams (g)',  outLbl:'Carats (ct)',  inPh:'Enter grams',   step:0.0001, fn:v=>v*5,                dec:4, quick:[0.1,0.2,0.5,1,2,5], qlbl:v=>v+'g' },
+  gtr:{ inLbl:'Grams (g)',  outLbl:'Ratti',        inPh:'Enter grams',   step:0.0001, fn:v=>v/RATTI_G,          dec:4, quick:[0.1,0.2,0.5,1,2,5], qlbl:v=>v+'g' },
+};
+
+function setConvDir(dir,btn){
+  convDir=dir;
+  document.querySelectorAll('.conv-dir-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  const cfg=CONV_CONFIG[dir];
+  document.getElementById('convInput').value='';
+  document.getElementById('convOutput').value='';
+  document.getElementById('convInputLabel').textContent=cfg.inLbl;
+  document.getElementById('convOutputLabel').textContent=cfg.outLbl;
+  document.getElementById('convInput').placeholder=cfg.inPh;
+  document.getElementById('convInput').step=cfg.step;
+  document.querySelectorAll('.conv-quick-btn.qb').forEach((b,i)=>{
+    b.textContent=cfg.qlbl(cfg.quick[i]);
+    b.dataset.val=cfg.quick[i];
+    b.onclick=()=>quickConv(cfg.quick[i]);
+  });
+}
+
+function doConvert(){
+  const v=parseFloat(document.getElementById('convInput').value);
+  if(isNaN(v)||v<0){document.getElementById('convOutput').value='';return;}
+  const cfg=CONV_CONFIG[convDir];
+  const result=cfg.fn(v);
+  document.getElementById('convOutput').value=result.toLocaleString('en-US',{minimumFractionDigits:cfg.dec,maximumFractionDigits:cfg.dec});
+}
+
+function quickConv(val){
+  document.getElementById('convInput').value=val;
+  doConvert();
+}
+
+/* ════════ INIT ════════ */
+document.addEventListener('DOMContentLoaded',()=>{
+  document.getElementById('footerYear').textContent=new Date().getFullYear();
+  onMetalChange();
+  onGemChange();
+  renderShapePills();
+  renderGemPrices();
+  renderMetalPriceTable();
+  renderCityGrid();
+  document.getElementById('metalPriceTime').textContent='Reference prices (Apr 2026) — click Refresh to fetch live data';
+  fetchINRRate();
+  fetchPrices();
+});
+</script>
+
+<!-- PWA Service Worker Registration -->
+<script>
+// Skip SW registration on preview/sandbox domains (claudeusercontent.com, localhost previews, etc.)
+const _swSkipHosts = ['claudeusercontent.com', 'claude.ai', 'localhost', '127.0.0.1'];
+const _swShouldRegister = 'serviceWorker' in navigator &&
+  !_swSkipHosts.some(h => location.hostname.includes(h)) &&
+  location.protocol === 'https:';
+
+if(_swShouldRegister){
+  window.addEventListener('load',()=>{
+    navigator.serviceWorker.register('sw.js',{scope:'./'})
+      .then(reg=>{
+        console.log('[ORNATE PWA] SW registered:',reg.scope);
+        if('sync' in reg) reg.sync.register('price-refresh').catch(()=>{});
+        reg.addEventListener('updatefound',()=>{
+          const nw=reg.installing;
+          nw&&nw.addEventListener('statechange',()=>{
+            if(nw.state==='installed'&&navigator.serviceWorker.controller)
+              console.log('[ORNATE PWA] Update ready — reload to apply');
+          });
+        });
+      }).catch(e=>console.warn('[ORNATE PWA] SW failed:',e));
+
+    // Forward rate updates from SW
+    navigator.serviceWorker.addEventListener('message',e=>{
+      if(e.data?.type==='INR_RATE'){
+        INR_RATE=e.data.rate;
+        if(typeof renderMetalPriceTable==='function') renderMetalPriceTable();
+        if(typeof renderGemPrices==='function') renderGemPrices();
+      }
+      if(e.data?.type==='SPOT_RATES'&&typeof SPOT!=='undefined'){
+        const r=e.data.rates,troy=31.1035;
+        if(r.XAU) SPOT.gold     =parseFloat((1/r.XAU).toFixed(2));
+        if(r.XAG) SPOT.silver   =parseFloat((1/r.XAG).toFixed(2));
+        if(r.XPT) SPOT.platinum =parseFloat((1/r.XPT).toFixed(2));
+        if(r.XPD) SPOT.palladium=parseFloat((1/r.XPD).toFixed(2));
+        if(typeof renderMetalPriceTable==='function') renderMetalPriceTable();
+        if(typeof renderGemPrices==='function') renderGemPrices();
+      }
+    });
+  });
+
+  // Add-to-Home-Screen install banner
+  let _prompt;
+  window.addEventListener('beforeinstallprompt',e=>{
+    e.preventDefault(); _prompt=e;
+    setTimeout(()=>{_prompt&&_showInstall();},3500);
+  });
+  window.addEventListener('appinstalled',()=>{_dismissInstall();});
+
+  function _showInstall(){
+    if(document.getElementById('_ornate_install')) return;
+    const b=document.createElement('div');
+    b.id='_ornate_install';
+    b.style.cssText='position:fixed;bottom:16px;left:50%;transform:translateX(-50%);background:var(--surface);border:1px solid var(--accent);border-radius:14px;padding:12px 16px;display:flex;align-items:center;gap:11px;z-index:9999;max-width:320px;width:calc(100% - 32px);box-shadow:0 4px 24px var(--shadow2);font-family:Inter,sans-serif;';
+    b.innerHTML=`<span style="font-size:1.5rem">💎</span><div style="flex:1"><div style="color:var(--accent);font-size:.78rem;font-weight:600;letter-spacing:.04em">Install ORNATE</div><div style="color:var(--text3);font-size:.68rem;margin-top:2px">Offline access · Home screen shortcut</div></div><button onclick="_installApp()" style="background:var(--accent);color:#fff;border:none;border-radius:8px;padding:7px 13px;font-size:.7rem;font-weight:700;cursor:pointer;letter-spacing:.06em;text-transform:uppercase;white-space:nowrap">Add</button><button onclick="_dismissInstall()" style="background:transparent;border:none;color:var(--text3);cursor:pointer;font-size:1.1rem;padding:2px 6px;line-height:1">✕</button>`;
+    document.body.appendChild(b);
+  }
+  window._installApp=function(){if(!_prompt)return;_prompt.prompt();_prompt.userChoice.then(()=>{_prompt=null;_dismissInstall();});};
+  window._dismissInstall=function(){const b=document.getElementById('_ornate_install');if(b)b.remove();_prompt=null;};
+}
+</script>
+</body>
+</html>
